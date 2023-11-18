@@ -1,0 +1,72 @@
+#include "Server.hpp"
+
+Server::Server(std::string password, std::string port) : _password(password), _port(port), _serv_info(NULL)
+{
+
+    this->setCreationDate();
+}
+
+Server::~Server()
+{
+    if (this->_serv_info != NULL)
+        freeaddrinfo(this->getServInfo());
+}
+
+int Server::networkInit()
+{
+    struct addrinfo hints;
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;       // IPv4
+    hints.ai_socktype = SOCK_STREAM; // TCP
+    hints.ai_flags = AI_PASSIVE;     // Listen on any IP address
+    int status = getaddrinfo(NULL, _port.c_str(), &hints, &_serv_info);
+    if (status != 0)
+    {
+        throw std::runtime_error("getaddrinfo Error");
+    }
+    this->_serv_sockfd = socket(this->_serv_info->ai_family, this->_serv_info->ai_socktype, this->_serv_info->ai_protocol);
+    if (this->_serv_sockfd == -1)
+    {
+        throw std::runtime_error("socket Error : can't create socket");
+    }
+    int yes = 1;
+    if (setsockopt(this->_serv_sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
+    {
+        throw std::runtime_error("setsockopt Error: can't set socket options");
+    }
+    if (bind(this->_serv_sockfd, this->_serv_info->ai_addr, this->_serv_info->ai_addrlen) == -1)
+    {
+        throw std::runtime_error("bind Error: can't bind socket");
+    }
+    if (listen(this->_serv_sockfd, 10) == -1)
+    {
+        throw std::runtime_error("listen Error: can't listen on socket");
+    }
+    freeaddrinfo(this->_serv_info);
+    this->_serv_info = NULL;
+    PRINT(RED << "Server is listening on port " << this->_port << RESET);
+    return SUCCESS;
+}
+
+void Server::setCreationDate()
+{
+    time_t timer;
+    struct tm *timeinfo;
+    char formated_time[40];
+
+    time(&timer);
+    timeinfo = localtime(&timer);
+    strftime(formated_time, sizeof(formated_time), "%d-%m-%Y %H:%M:%S", timeinfo);
+    this->_creation_date = formated_time;
+}
+
+std::string Server::getCreationDate()
+{
+    return this->_creation_date;
+}
+
+struct addrinfo *Server::getServInfo()
+{
+    return this->_serv_info;
+}
