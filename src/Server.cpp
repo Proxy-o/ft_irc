@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(std::string password, std::string port) : _password(password), _port(port), _serv_info(NULL)
+Server::Server(std::string password, std::string port) : _password(password), _port(port)
 {
 
     this->setCreationDate();
@@ -8,24 +8,23 @@ Server::Server(std::string password, std::string port) : _password(password), _p
 
 Server::~Server()
 {
-    if (this->_serv_info != NULL)
-        freeaddrinfo(this->getServInfo());
 }
 
 int Server::networkInit()
 {
     struct addrinfo hints;
+    struct addrinfo *serv_info;
 
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;       // IPv4
     hints.ai_socktype = SOCK_STREAM; // TCP
     hints.ai_flags = AI_PASSIVE;     // Listen on any IP address
-    int status = getaddrinfo(NULL, _port.c_str(), &hints, &_serv_info);
+    int status = getaddrinfo(NULL, _port.c_str(), &hints, &serv_info);
     if (status != 0)
     {
         throw std::runtime_error("getaddrinfo Error");
     }
-    this->_serv_sockfd = socket(this->_serv_info->ai_family, this->_serv_info->ai_socktype, this->_serv_info->ai_protocol);
+    this->_serv_sockfd = socket(serv_info->ai_family, serv_info->ai_socktype, serv_info->ai_protocol);
     if (this->_serv_sockfd == -1)
     {
         throw std::runtime_error("socket Error : can't create socket");
@@ -35,7 +34,7 @@ int Server::networkInit()
     {
         throw std::runtime_error("setsockopt Error: can't set socket options");
     }
-    if (bind(this->_serv_sockfd, this->_serv_info->ai_addr, this->_serv_info->ai_addrlen) == -1)
+    if (bind(this->_serv_sockfd, serv_info->ai_addr, serv_info->ai_addrlen) == -1)
     {
         throw std::runtime_error("bind Error: can't bind socket");
     }
@@ -43,8 +42,8 @@ int Server::networkInit()
     {
         throw std::runtime_error("listen Error: can't listen on socket");
     }
-    freeaddrinfo(this->_serv_info);
-    this->_serv_info = NULL;
+    freeaddrinfo(serv_info);
+    serv_info = NULL;
     PRINT(RED << "Server is listening on port " << this->_port << RESET);
     return SUCCESS;
 }
@@ -150,9 +149,4 @@ void Server::setCreationDate()
 std::string Server::getCreationDate()
 {
     return this->_creation_date;
-}
-
-struct addrinfo *Server::getServInfo()
-{
-    return this->_serv_info;
 }

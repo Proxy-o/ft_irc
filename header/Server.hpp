@@ -9,6 +9,7 @@
 #include <iostream>
 #include <poll.h>
 #include <vector>
+#include <map>
 
 #define PRINT(x) std::cout << x << std::endl;
 #define PRINT_ERR(x) std::cerr << x << std::endl;
@@ -26,8 +27,8 @@ private:
     std::string _creation_date;
     std::string _password;
     std::string _port;
+    std::map<int, std::string> _clients;
     int _serv_sockfd;
-    struct addrinfo *_serv_info;
 
 public:
     Server(std::string password, std::string port);
@@ -37,7 +38,6 @@ public:
 
     // ************GETTERS************
     std::string getCreationDate();
-    struct addrinfo *getServInfo();
 
     // ************METHODS************
     int networkInit();
