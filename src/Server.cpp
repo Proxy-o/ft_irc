@@ -49,6 +49,92 @@ int Server::networkInit()
     return SUCCESS;
 }
 
+void add_pollfd(std::vector<pollfd> &fds, short int events, int fd)
+{
+    pollfd poll_fd;
+    poll_fd.fd = fd;
+    poll_fd.events = events;
+    fds.push_back(poll_fd);
+}
+
+int Server::acceptNewConnection()
+{
+    struct sockaddr_storage client_addr;
+    socklen_t client_addr_size = sizeof(client_addr);
+    int client_sockfd = accept(this->_serv_sockfd, (struct sockaddr *)&client_addr, &client_addr_size);
+    if (client_sockfd == -1)
+    {
+        PRINT_ERR(RED << "accept Error" << RESET);
+        return FAIL;
+    }
+    // TODO: NEED TO ADD NEW CLIENT TO THE CLIENTS LIST
+    return client_sockfd;
+}
+
+int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
+{
+    char buffer[1024];
+    int recv_status = recv(it->fd, buffer, sizeof(buffer), 0);
+    if (recv_status == -1)
+    {
+        PRINT_ERR(RED << "recv Error" << RESET);
+        return FAIL;
+    }
+    else if (recv_status == 0)
+    {
+        close(it->fd);
+        poll_fds.erase(it);
+        PRINT(BLUE << "Client disconnected" << RESET);
+        // TODO: NEED TO REMOVE THE CLIENT FROM THE CLIENTS LIST
+        return FAIL;
+    }
+    return SUCCESS;
+}
+
+int Server::runLoop()
+{
+    std::vector<pollfd> poll_fds;
+    add_pollfd(poll_fds, POLLIN, this->_serv_sockfd);
+
+    while (true)
+    {
+        std::vector<int> fds_to_add;
+        int poll_status = poll(&poll_fds[0], poll_fds.size(), -1);
+        if (poll_status == -1)
+        {
+            throw std::runtime_error("poll Error");
+        }
+
+        std::vector<pollfd>::iterator it = poll_fds.begin();
+        for (; it != poll_fds.end(); it++)
+        {
+            if (it->revents & POLLIN)
+            {
+                if (it->fd == this->_serv_sockfd)
+                {
+                    int client_sockfd = acceptNewConnection();
+                    if (client_sockfd == FAIL)
+                        continue;
+                    fds_to_add.push_back(client_sockfd);
+                    PRINT(GREEN << "New connection" << RESET);
+                }
+                else
+                {
+                    int recv_status = recvMessage(poll_fds, it);
+                    if (recv_status == FAIL)
+                        break;
+                    PRINT(BLUE << "Message received" << RESET);
+                }
+            }
+        }
+        std::vector<int>::iterator it2 = fds_to_add.begin();
+        for (; it2 != fds_to_add.end(); it2++)
+        {
+            add_pollfd(poll_fds, POLLIN | POLLOUT, *it2);
+        }
+    }
+}
+
 void Server::setCreationDate()
 {
     time_t timer;

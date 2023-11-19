@@ -9,9 +9,10 @@ int main(void)
     {
         Server server("1234", "8080");
         server.networkInit();
+        server.runLoop();
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Exception " << e.what() << std::endl;
+        std::cerr << RED << "Exception " << e.what() << RESET << std::endl;
     }
 }
