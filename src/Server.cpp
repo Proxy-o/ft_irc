@@ -66,10 +66,18 @@ int Server::acceptNewConnection()
         PRINT_ERR(RED << "accept Error" << RESET);
         return FAIL;
     }
-    // TODO: NEED TO ADD NEW CLIENT TO THE CLIENTS LIST
+    Client client(client_sockfd);
+    this->_clients.insert(std::pair<int, Client>(client_sockfd, client));
     return client_sockfd;
 }
 
+void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
+{
+    close(it->fd);
+    poll_fds.erase(it);
+    this->_clients.erase(it->fd);
+    PRINT(BLUE << "Client disconnected" << RESET);
+}
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
     char buffer[1024];
@@ -81,12 +89,10 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
     }
     else if (recv_status == 0)
     {
-        close(it->fd);
-        poll_fds.erase(it);
-        PRINT(BLUE << "Client disconnected" << RESET);
-        // TODO: NEED TO REMOVE THE CLIENT FROM THE CLIENTS LIST
+        removeClient(poll_fds, it);
         return FAIL;
     }
+    // TODO: handle message
     return SUCCESS;
 }
 

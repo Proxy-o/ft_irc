@@ -10,6 +10,7 @@
 #include <poll.h>
 #include <vector>
 #include <map>
+#include "Client.hpp"
 
 #define PRINT(x) std::cout << x << std::endl;
 #define PRINT_ERR(x) std::cerr << x << std::endl;
@@ -27,8 +28,8 @@ private:
     std::string _creation_date;
     std::string _password;
     std::string _port;
-    std::map<int, std::string> _clients;
     int _serv_sockfd;
+    std::map<int, Client> _clients;
 
 public:
     Server(std::string password, std::string port);
@@ -44,6 +45,7 @@ public:
     int runLoop();
     int acceptNewConnection();
     int recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
+    void removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
 
     // ************ STATIC FUNCTIONS ************
 };
