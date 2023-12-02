@@ -18,10 +18,17 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
     this->_clients.erase(it->fd);
     PRINT(BLUE << "Client disconnected" << RESET);
 }
+
+void Server::setClientBuffer(std::vector<pollfd>::iterator it, std::string message)
+{
+    Client &client = this->getClient(it->fd);
+    client.setBuffer(message);
+    
+}
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
     char buffer[512];
-    memset(buffer, 0, sizeof(buffer));
+    bzero(buffer, sizeof(buffer));
     int recv_status = recv(it->fd, buffer, sizeof(buffer), 0);
     if (recv_status == -1)
     {
@@ -33,7 +40,13 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         removeClient(poll_fds, it);
         return FAIL;
     }
-    PRINT(BLUE << buffer << RESET);
+    else
+    {
+        std::string message(buffer);
+        setClientBuffer(it, message);
+        return SUCCESS;
+    }
+    
     return SUCCESS;
 }
 
@@ -69,7 +82,11 @@ int Server::runLoop()
                     int recv_status = recvMessage(poll_fds, it);
                     if (recv_status == FAIL)
                         break;
-                    PRINT(BLUE << "Message received" << RESET);
+                    else if (recv_status == SUCCESS)
+                    {
+                        PRINT(BLUE << "Message received" << RESET);
+                        parseMessage(it->fd);
+                    }
                 }
             }
         }
@@ -96,4 +113,16 @@ void Server::setCreationDate()
 std::string Server::getCreationDate()
 {
     return this->_creation_date;
+}
+Client &Server::getClient(int fd)
+{
+    std::map<int, Client>::iterator it = this->_clients.find(fd);
+    if (it != this->_clients.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        throw std::runtime_error("Client not found");
+    }
 }

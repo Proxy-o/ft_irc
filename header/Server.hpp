@@ -46,7 +46,9 @@ public:
     int acceptNewConnection();
     int recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
     void removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
-
+    void setClientBuffer( std::vector<pollfd>::iterator it, std::string message);
+    int parseMessage(int fd);
+    Client &getClient(int fd);
     // ************ STATIC FUNCTIONS ************
 };
 /**
