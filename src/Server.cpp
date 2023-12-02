@@ -20,7 +20,8 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
 }
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
-    char buffer[1024];
+    char buffer[512];
+    memset(buffer, 0, sizeof(buffer));
     int recv_status = recv(it->fd, buffer, sizeof(buffer), 0);
     if (recv_status == -1)
     {
@@ -32,7 +33,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         removeClient(poll_fds, it);
         return FAIL;
     }
-    // TODO: handle message
+    PRINT(BLUE << buffer << RESET);
     return SUCCESS;
 }
 
