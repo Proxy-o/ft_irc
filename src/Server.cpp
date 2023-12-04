@@ -14,8 +14,8 @@ Server::~Server()
 void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
     close(it->fd);
-    poll_fds.erase(it);
     this->_clients.erase(it->fd);
+    poll_fds.erase(it);
     PRINT(BLUE << "Client disconnected" << RESET);
 }
 
