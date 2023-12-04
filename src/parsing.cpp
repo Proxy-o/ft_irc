@@ -3,7 +3,18 @@
 int Server::parseMessage(int fd)
 {
     Client client = this->getClient(fd);
-    std::string message = client.getBuffer();
-    PRINT(BLUE << "Message received: " << message << RESET);
+    std::string message = client.getRecvBuffer();
+    if (message.find("\r\n") != std::string::npos)
+       {
+        if (client.isRegistered() == false)
+        {
+            // handle registration
+
+        }
+        else
+        {
+            // handle commands
+        }
+       }
     return SUCCESS;
 }

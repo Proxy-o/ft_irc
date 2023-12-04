@@ -19,10 +19,10 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
     PRINT(BLUE << "Client disconnected" << RESET);
 }
 
-void Server::setClientBuffer(std::vector<pollfd>::iterator it, std::string message)
+void Server::setClientRecvBuffer(std::vector<pollfd>::iterator it, std::string message)
 {
     Client &client = this->getClient(it->fd);
-    client.setBuffer(message);
+    client.setRecvBuffer(message);
     
 }
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
@@ -43,7 +43,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
     else
     {
         std::string message(buffer);
-        setClientBuffer(it, message);
+        setClientRecvBuffer(it, message);
         return SUCCESS;
     }
     
@@ -84,7 +84,6 @@ int Server::runLoop()
                         break;
                     else if (recv_status == SUCCESS)
                     {
-                        PRINT(BLUE << "Message received" << RESET);
                         parseMessage(it->fd);
                     }
                 }

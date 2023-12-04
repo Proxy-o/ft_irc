@@ -7,7 +7,7 @@ int main(void)
 {
     try
     {
-        Server server("1234", "8080");
+        Server server("1234", "6667");
         server.networkInit();
         server.runLoop();
     }
