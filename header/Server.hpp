@@ -49,6 +49,7 @@ public:
     void removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
     int parseMessage(int fd);
     Client &getClient(int fd);
+    void registerClient(Client &client, std::string message);
     // ************ STATIC FUNCTIONS ************
 };
 /**

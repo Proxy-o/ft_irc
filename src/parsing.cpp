@@ -8,13 +8,7 @@ int Server::parseMessage(int fd)
        {
         if (client.isRegistered() == false)
         {
-            std::vector<std::string> lines = splitBuffer(message, "\n");
-            std::vector<std::string>::iterator it = lines.begin();
-            for (; it != lines.end(); it++)
-            {
-                PRINT(*it);
-            }
-            
+           this->registerClient(client, message); 
         }
         else
         {
