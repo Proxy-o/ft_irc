@@ -23,5 +23,8 @@ public:
     std::string getRecvBuffer();
     bool isRegistered();
 
+    // ************METHODS************
+    void resetRecvBuffer();
+
 };
 

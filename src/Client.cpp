@@ -10,6 +10,10 @@ Client::~Client()
 {
 }
 
+void Client::resetRecvBuffer()
+{
+    this->_recv_buffer = "";
+}
 
 
 void Client::setRecvBuffer(std::string buffer)

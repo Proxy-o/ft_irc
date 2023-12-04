@@ -11,6 +11,7 @@
 #include <vector>
 #include <map>
 #include "Client.hpp"
+#include "utils.hpp"
 
 #define PRINT(x) std::cout << x << std::endl;
 #define PRINT_ERR(x) std::cerr << x << std::endl;
@@ -46,7 +47,6 @@ public:
     int acceptNewConnection();
     int recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
     void removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it);
-    void setClientRecvBuffer( std::vector<pollfd>::iterator it, std::string message);
     int parseMessage(int fd);
     Client &getClient(int fd);
     // ************ STATIC FUNCTIONS ************
