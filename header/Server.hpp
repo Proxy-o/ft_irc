@@ -12,6 +12,7 @@
 #include <map>
 #include "Client.hpp"
 #include "utils.hpp"
+#include "irc_replies.hpp"
 
 #define PRINT(x) std::cout << x << std::endl;
 #define PRINT_ERR(x) std::cerr << x << std::endl;

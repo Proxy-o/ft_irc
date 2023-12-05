@@ -84,6 +84,24 @@ int Server::runLoop()
                     }
                 }
             }
+            else if (it->revents & POLLOUT) 
+			{
+                Client &client = this->getClient(it->fd);
+                std::string message = client.getSendBuffer();
+                if (message != "")
+                {
+                    int send_status = send(it->fd, message.c_str(), message.length(), 0);
+                    if (send_status == -1)
+                    {
+                        PRINT_ERR(RED << "send Error" << RESET);
+                        return FAIL;
+                    }
+                    else
+                    {
+                        client.resetSendBuffer();
+                    }
+                }
+            }
         }
         std::vector<int>::iterator it2 = fds_to_add.begin();
         for (; it2 != fds_to_add.end(); it2++)

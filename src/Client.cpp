@@ -35,3 +35,27 @@ bool Client::isRegistered()
 {
     return this->_is_registered;
 }
+
+void Client::setSendBuffer(std::string buffer)
+{
+    this->_send_buffer += buffer;
+}
+
+std::string Client::getSendBuffer()
+{
+    return this->_send_buffer;
+}
+void Client::resetSendBuffer()
+{
+    this->_send_buffer = "";
+}
+
+void Client::setNickname(std::string nickname)
+{
+    this->_nickname = nickname;
+}
+
+std::string Client::getNickname()
+{
+    return this->_nickname;
+}
