@@ -1,21 +1,30 @@
 #include "commands.hpp"
 #include "Server.hpp"
 
+static bool	nickIsValid(std::string nickname)
+{
+    if (nickname.find_first_of(" ,.@?!*") != std::string::npos)
+        return false;
+    if (nickname.find_first_of("123456789$:#") == 0)
+        return false;
+    else
+    return true;
+}
+
 void nick(std::vector<std::string> &message, Client &client, Server &server)
 {
-    PRINT("HANDLE NICK IN nick")
     (void)server;
     if (message.size() < 2)
     {
         client.setSendBuffer(ERR_NONICKNAMEGIVEN(client.getNickname()));
         return;
     }
-    // std::string nickname = message[1];
-    // if (nickname.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]\\`_^{|}-") != std::string::npos)
-    // {
-    //     client.sendReply(ERR_ERRONEUSNICKNAME, nickname + ":Erroneous nickname");
-    //     return;
-    // }
+    std::string nickname = message[1];
+    if (nickIsValid(nickname) == false)
+    {
+        client.setSendBuffer(ERR_ERRONEUSNICKNAME(client.getNickname(), nickname));
+        return;
+    }
     // if (nickname.size() > 9)
     // {
     //     client.sendReply(ERR_NICKNAMEINUSE, nickname + ":Nickname is already in use");

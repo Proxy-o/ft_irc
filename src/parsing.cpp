@@ -14,6 +14,7 @@ int Server::parseMessage(int fd)
         {
             // handle commands
         }
+   client.resetRecvBuffer();
        }
     return SUCCESS;
 }

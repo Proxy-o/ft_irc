@@ -10,9 +10,7 @@ void Server::registerClient(Client &client, std::string message)
         std::string line = *it;
         formatMessage(line);
         std::vector<std::string> tokens = ft_split(line, " ");
-        
-        // Remove \n\r from the start and the end of the string if it exists
-        
+                
         if (tokens[0] == "NICK")
             nick(tokens, client, *this);
         // else if (tokens[0] == "USER")
