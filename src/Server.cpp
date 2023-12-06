@@ -134,8 +134,20 @@ Client &Server::getClient(int fd)
     {
         return it->second;
     }
-    else
+    it = this->_clients.end();
+    return it->second;
+}
+
+Client &Server::getClientByNickname(std::string nickname)
+{
+    std::map<int, Client>::iterator it = this->_clients.begin();
+    for (; it != this->_clients.end(); it++)
     {
-        throw std::runtime_error("Client not found");
+        if (it->second.getNickname() == nickname)
+        {
+            return it->second;
+        }
     }
+    it = this->_clients.end();
+    return it->second; 
 }

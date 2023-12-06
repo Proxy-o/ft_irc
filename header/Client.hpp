@@ -16,6 +16,9 @@ private:
 public:
     Client(int sockfd);
     ~Client();
+    Client &operator=(const Client &client);
+    bool operator==(const Client &client) const;
+    bool operator!=(const Client &client) const;
     // ************SETTERS************
     void setRecvBuffer(std::string buffer);
     void setIsRegistered(bool status);

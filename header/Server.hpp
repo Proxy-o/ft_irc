@@ -51,6 +51,7 @@ public:
     int parseMessage(int fd);
     Client &getClient(int fd);
     void registerClient(Client &client, std::string message);
+    Client &getClientByNickname(std::string nickname);
     // ************ STATIC FUNCTIONS ************
 };
 /**

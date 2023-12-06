@@ -25,17 +25,14 @@ void nick(std::vector<std::string> &message, Client &client, Server &server)
         client.setSendBuffer(ERR_ERRONEUSNICKNAME(client.getNickname(), nickname));
         return;
     }
-    // if (nickname.size() > 9)
-    // {
-    //     client.sendReply(ERR_NICKNAMEINUSE, nickname + ":Nickname is already in use");
-    //     return;
-    // }
-    // if (server.getClientByNickname(nickname) != NULL)
-    // {
-    //     client.sendReply(ERR_NICKNAMEINUSE, nickname + ":Nickname is already in use");
-    //     return;
-    // }
-    // client.setNickname(nickname);
+
+    Client &old_client = server.getClientByNickname(nickname);
+    if (old_client != server.getClient(-1) && old_client != client )
+    {
+        client.setSendBuffer(ERR_NICKNAMEINUSE(client.getNickname(), nickname));
+        return;
+    }
+    client.setNickname(nickname);
     // if (client.isRegistered() == false)
     // {
     //     client.setRegistered(true);

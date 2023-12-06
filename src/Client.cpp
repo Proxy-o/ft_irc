@@ -10,6 +10,28 @@ Client::~Client()
 {
 }
 
+Client &Client::operator=(const Client &client)
+{
+    this->_client_sockfd = client._client_sockfd;
+    this->_recv_buffer = client._recv_buffer;
+    this->_send_buffer = client._send_buffer;
+    this->_is_registered = client._is_registered;
+    this->_nickname = client._nickname;
+    return *this;
+}
+
+bool Client::operator==(const Client &client) const
+{
+    // compare the addresses of the two objects and return true if they are equal
+    return this == &client;
+}
+
+bool Client::operator!=(const Client &client) const
+{
+    // compare the two objects and return true if they are not equal
+    return !(*this == client); 
+}
+
 void Client::resetRecvBuffer()
 {
     this->_recv_buffer = "";
