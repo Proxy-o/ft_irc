@@ -35,3 +35,13 @@ void formatMessage(std::string &message)
         message = message.substr(start, end - start + 1);
     }
 }
+
+bool isCommand(std::string cmd, std::string message)
+{
+    std::vector<std::string> tokens = ft_split(message, " ");
+    if (tokens.size() == 0)
+        return false;
+    if (tokens[0] == cmd)
+        return true;
+    return false;
+}

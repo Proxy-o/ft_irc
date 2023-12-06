@@ -4,6 +4,10 @@ Client::Client(int sockfd)
 {
     this->_client_sockfd = sockfd;
     this->_recv_buffer = "";
+    this->_send_buffer = "";
+    this->_is_registered = false;
+    this->_nickname = "";
+
 }
 
 Client::~Client()
@@ -80,4 +84,24 @@ void Client::setNickname(std::string nickname)
 std::string Client::getNickname()
 {
     return this->_nickname;
+}
+
+void Client::setUsername(std::string username)
+{
+    this->_username = username;
+}
+
+std::string Client::getUsername()
+{
+    return this->_username;
+}
+
+void Client::setRealname(std::string realname)
+{
+    this->_realname = realname;
+}
+
+std::string Client::getRealname()
+{
+    return this->_realname;
 }

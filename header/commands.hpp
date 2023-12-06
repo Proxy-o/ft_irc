@@ -3,4 +3,5 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
-void nick(std::vector<std::string> &message, Client &client, Server &server);
+void nick(std::string &line, Client &client, Server &server);
+void user(std::string &message, Client &clientr);

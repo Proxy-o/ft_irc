@@ -11,15 +11,16 @@ static bool	nickIsValid(std::string nickname)
     return true;
 }
 
-void nick(std::vector<std::string> &message, Client &client, Server &server)
+void nick(std::string &message, Client &client, Server &server)
 {
-    
-    if (message.size() < 2)
+
+    std::vector<std::string> tokens = ft_split(message, " ");
+    if (tokens.size() < 2)
     {
         client.setSendBuffer(ERR_NONICKNAMEGIVEN(client.getNickname()));
         return;
     }
-    std::string nickname = message[1];
+    std::string nickname = tokens[1];
     if (nickIsValid(nickname) == false)
     {
         client.setSendBuffer(ERR_ERRONEUSNICKNAME(client.getNickname(), nickname));

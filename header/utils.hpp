@@ -22,8 +22,20 @@ void printVector(std::vector<std::string> &vec);
  * @brief Formats the given message.
  * 
  * This function formats the message by modifying it in-place by 
- * removing " \r \n" from the start and the end.
+ * removing  \\r \" \\n from the start and the end.
  * 
  * @param message The message to be formatted.
  */
 void formatMessage(std::string &message);
+
+/**
+ * @brief Checks if the given message is a command.
+ * 
+ * This function checks if the given message is a command by comparing
+ * the first token of the message with the given command.
+ * 
+ * @param cmd The command to be compared with.
+ * @param message The message to be checked.
+ * @return true if the message is a command, false otherwise.
+ */
+bool isCommand(std::string cmd, std::string message);

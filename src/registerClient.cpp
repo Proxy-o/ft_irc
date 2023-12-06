@@ -9,14 +9,10 @@ void Server::registerClient(Client &client, std::string message)
     {
         std::string line = *it;
         formatMessage(line);
-        std::vector<std::string> tokens = ft_split(line, " ");
-                
-        if (tokens[0] == "NICK")
-            nick(tokens, client, *this);
-        // else if (tokens[0] == "USER")
-        //     PRINT("HANDLE USER")
-        // else if (tokens[0] == "PASS")
-        //     PRINT("HANDLE PASS")
-    
+        if (isCommand("NICK", line) == true)
+            nick(line, client, *this);
+        else if (isCommand("USER", line) == true)
+            user(line, client);
+
     }
 }

@@ -7,6 +7,7 @@ class Client
 {
 private:
     std::string _username;
+    std::string _realname;
     std::string _nickname;
     int _client_sockfd;
     std::string _recv_buffer;
@@ -24,12 +25,16 @@ public:
     void setIsRegistered(bool status);
     void setSendBuffer(std::string buffer);
     void setNickname(std::string nickname);
+    void setUsername(std::string username);
+    void setRealname(std::string realname);
 
     // ************GETTERS************
     std::string getRecvBuffer();
     bool isRegistered();
     std::string getSendBuffer();
     std::string getNickname();
+    std::string getUsername();
+    std::string getRealname();
 
     // ************METHODS************
     void resetRecvBuffer();
