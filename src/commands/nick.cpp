@@ -13,7 +13,7 @@ static bool	nickIsValid(std::string nickname)
 
 void nick(std::vector<std::string> &message, Client &client, Server &server)
 {
-    (void)server;
+    
     if (message.size() < 2)
     {
         client.setSendBuffer(ERR_NONICKNAMEGIVEN(client.getNickname()));
@@ -33,16 +33,5 @@ void nick(std::vector<std::string> &message, Client &client, Server &server)
         return;
     }
     client.setNickname(nickname);
-    // if (client.isRegistered() == false)
-    // {
-    //     client.setRegistered(true);
-    //     client.sendReply(RPL_WELCOME, ":Welcome to the Internet Relay Network " + client.getNickname() + "!" + client.getUsername() + "@" + client.getHostname());
-    //     client.sendReply(RPL_YOURHOST, ":Your host is " + server.getHostname() + ", running version 1.0");
-    //     client.sendReply(RPL_CREATED, ":This server was created " + server.getCreationDate());
-    //     client.sendReply(RPL_MYINFO, server.getHostname() + " 1.0 o o");
-    // }
-    // else
-    // {
-    //     client.sendReply(RPL_NICK, client.getNickname());
-    // }
+
 }
