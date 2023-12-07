@@ -151,3 +151,8 @@ Client &Server::getClientByNickname(std::string nickname)
     it = this->_clients.end();
     return it->second; 
 }
+
+std::string Server::getPassword()
+{
+    return this->_password;
+}

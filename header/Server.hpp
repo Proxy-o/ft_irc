@@ -38,9 +38,9 @@ public:
     ~Server();
     // ************SETTERS************
     void setCreationDate();
-
     // ************GETTERS************
     std::string getCreationDate();
+    std::string getPassword();
 
     // ************METHODS************
     int networkInit();

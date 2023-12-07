@@ -13,6 +13,7 @@ private:
     std::string _recv_buffer;
     std::string _send_buffer;
     bool _is_registered;
+    bool _pass_is_correct;
 
 public:
     Client(int sockfd);
@@ -20,6 +21,7 @@ public:
     Client &operator=(const Client &client);
     bool operator==(const Client &client) const;
     bool operator!=(const Client &client) const;
+
     // ************SETTERS************
     void setRecvBuffer(std::string buffer);
     void setIsRegistered(bool status);
@@ -27,6 +29,7 @@ public:
     void setNickname(std::string nickname);
     void setUsername(std::string username);
     void setRealname(std::string realname);
+    void setPassIsCorrect(bool status);
 
     // ************GETTERS************
     std::string getRecvBuffer();
@@ -35,6 +38,7 @@ public:
     std::string getNickname();
     std::string getUsername();
     std::string getRealname();
+    bool passIsCorrect();
 
     // ************METHODS************
     void resetRecvBuffer();
