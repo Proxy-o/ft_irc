@@ -2,9 +2,10 @@
 
 void user(std::string &message, Client &client)
 {
-    
+
     std::vector<std::string> tokens = ft_split(message, " ");
     std::string realName;
+
     bool semicolon = false;
 
     if (tokens.size() < 5)

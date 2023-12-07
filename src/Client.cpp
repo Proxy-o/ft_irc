@@ -113,3 +113,13 @@ bool Client::isPassCorrect()
 {
     return this->_pass_is_correct;
 }
+
+void Client::setIsWelcomed(bool status)
+{
+    this->_is_welcomed = status;
+}
+
+bool Client::isWelcomed()
+{
+    return this->_is_welcomed;
+}

@@ -2,6 +2,8 @@
 
 #include <string>
 
+#define RPL_WELCOME(client) (":localhost 001 " + client + " :Welcome to FT_IRC " + client + "\r\n")
+
 #define ERR_NEEDMOREPARAMS(client, command) (":localhost 461 " + client + " " + command + " :Not enough parameters\r\n")
 #define ERR_NOTREGISTERED(client) (":localhost 451 " + client + " :You have not registered\r\n")
 
@@ -9,7 +11,7 @@
 #define ERR_NONICKNAMEGIVEN(nick_name) (":localhost 431 " + nick_name + " :No nickname given\r\n")
 #define ERR_ERRONEUSNICKNAME(client, new_nickname) (":localhost 432 " + client + " " + new_nickname + " :Erroneus nickname\r\n")
 #define ERR_NICKNAMEINUSE(client, new_nickname) (":localhost 433 " + client + " " + new_nickname + " :Nickname is already in use\r\n")
-#define RPL_NICK(oclient, uclient, client) (":" + oclient + "!" + uclient + "@localhost NICK " + client + "\r\n")
+#define RPL_NICK(old_nick, username, new_nick) (":" + old_nick + "!" + username + "@localhost NICK " + new_nick + "\r\n")
 
 // PASS
 #define ERR_PASSWDMISMATCH(client) (":localhost 464 " + client + " :Password incorrect\r\n")

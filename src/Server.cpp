@@ -10,7 +10,6 @@ Server::~Server()
 {
 }
 
-
 void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
     close(it->fd);
@@ -18,7 +17,6 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
     poll_fds.erase(it);
     PRINT(BLUE << "Client disconnected" << RESET);
 }
-
 
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
@@ -42,7 +40,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         client.setRecvBuffer(message);
         return SUCCESS;
     }
-    
+
     return SUCCESS;
 }
 
@@ -84,8 +82,8 @@ int Server::runLoop()
                     }
                 }
             }
-            else if (it->revents & POLLOUT) 
-			{
+            else if (it->revents & POLLOUT)
+            {
                 Client &client = this->getClient(it->fd);
                 std::string message = client.getSendBuffer();
                 if (message != "")
@@ -99,6 +97,7 @@ int Server::runLoop()
                     else
                     {
                         client.resetSendBuffer();
+                        client.resetRecvBuffer();
                     }
                 }
             }
@@ -149,7 +148,7 @@ Client &Server::getClientByNickname(std::string nickname)
         }
     }
     it = this->_clients.end();
-    return it->second; 
+    return it->second;
 }
 
 std::string Server::getPassword()

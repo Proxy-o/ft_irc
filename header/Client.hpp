@@ -14,6 +14,7 @@ private:
     std::string _send_buffer;
     bool _is_registered;
     bool _pass_is_correct;
+    bool _is_welcomed;
 
 public:
     Client(int sockfd);
@@ -30,6 +31,7 @@ public:
     void setUsername(std::string username);
     void setRealname(std::string realname);
     void setIsPassCorrect(bool status);
+    void setIsWelcomed(bool status);
 
     // ************GETTERS************
     std::string getRecvBuffer();
@@ -39,6 +41,7 @@ public:
     std::string getUsername();
     std::string getRealname();
     bool isPassCorrect();
+    bool isWelcomed();
 
     // ************METHODS************
     void resetRecvBuffer();

@@ -17,33 +17,23 @@ int Server::registerClient(Client &client, std::string message)
     {
         std::string line = *it;
         formatMessage(line);
-        if (isCommand("PASS", line) == true && client.isRegistered() == false)
-        {
-            pass(line, client, *this);
-            return SUCCESS;
-        }
-        else if (isCommand("PASS", line) == true && client.isRegistered() == true)
-        {
-            client.setSendBuffer(ERR_ALREADYREGISTERED(client.getNickname()));
-            return SUCCESS;
-        }
-        else if (isCommand("NICK", line) == true)
+        if (line.find("NICK") == 0)
         {
             nick(line, client, *this);
-            return SUCCESS;
         }
-        else if (isCommand("USER", line) == true)
+        else if (line.find("USER") == 0)
         {
             user(line, client);
-            return SUCCESS;
+        }
+        else if (line.find("PASS") == 0)
+        {
+            pass(line, client, *this);
         }
         if (isValidData(client) == true && client.isPassCorrect() == true)
-            return SUCCESS;
-        else
         {
-            client.setSendBuffer(ERR_NOTREGISTERED(client.getNickname()));
-            return FAIL;
+            client.setSendBuffer(RPL_WELCOME(client.getNickname()));
+            client.setIsRegistered(true);
         }
     }
-    return FAIL;
+    return SUCCESS;
 }
