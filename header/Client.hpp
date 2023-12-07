@@ -29,7 +29,7 @@ public:
     void setNickname(std::string nickname);
     void setUsername(std::string username);
     void setRealname(std::string realname);
-    void setPassIsCorrect(bool status);
+    void setIsPassCorrect(bool status);
 
     // ************GETTERS************
     std::string getRecvBuffer();
@@ -38,11 +38,9 @@ public:
     std::string getNickname();
     std::string getUsername();
     std::string getRealname();
-    bool passIsCorrect();
+    bool isPassCorrect();
 
     // ************METHODS************
     void resetRecvBuffer();
     void resetSendBuffer();
-
 };
-

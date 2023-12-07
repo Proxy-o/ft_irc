@@ -3,18 +3,21 @@
 void pass(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> tokens = ft_split(message, " ");
-    PRINT(tokens[1])
+    client.setNickname("");
+    client.setUsername("");
+    client.setRealname("");
     if (tokens.size() < 2)
     {
         client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "PASS"));
         return;
     }
     if (tokens[1] == server.getPassword())
-        client.setPassIsCorrect(true);
+        client.setIsPassCorrect(true);
     else
     {
         client.setSendBuffer(ERR_PASSWDMISMATCH(client.getNickname()));
-        client.setPassIsCorrect(false);
+        client.setIsPassCorrect(false);
     }
+
     // TODO: handle ERR_ALREADYREGISTRED
 }

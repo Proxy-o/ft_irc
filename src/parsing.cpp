@@ -8,7 +8,10 @@ int Server::parseMessage(int fd)
     {
         if (client.isRegistered() == false)
         {
-            this->registerClient(client, message);
+            if (this->registerClient(client, message) == SUCCESS)
+            {
+                // client.setSendBuffer(RPL_WELCOME(client.getNickname()));
+            }
         }
         else
         {

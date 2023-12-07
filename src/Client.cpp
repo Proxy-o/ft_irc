@@ -104,12 +104,12 @@ std::string Client::getRealname()
     return this->_realname;
 }
 
-void Client::setPassIsCorrect(bool status)
+void Client::setIsPassCorrect(bool status)
 {
     this->_pass_is_correct = status;
 }
 
-bool Client::passIsCorrect()
+bool Client::isPassCorrect()
 {
     return this->_pass_is_correct;
 }
