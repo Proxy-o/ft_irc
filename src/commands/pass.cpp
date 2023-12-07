@@ -3,6 +3,7 @@
 void pass(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> tokens = ft_split(message, " ");
+    PRINT(tokens[1])
     if (tokens.size() < 2)
     {
         client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "PASS"));

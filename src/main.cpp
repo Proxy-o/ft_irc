@@ -3,11 +3,18 @@
 #include <iostream>
 #include "Server.hpp"
 
-int main(void)
+int main(int argc, char **argv)
 {
     try
     {
-        Server server("1234", "6667");
+        if (argc != 3)
+        {
+            std::cerr << "Usage: ./ircserv [port] [password]" << std::endl;
+            return 1;
+        }
+        std::string port(argv[1]);
+        std::string password(argv[2]);
+        Server server(password, port);
         server.networkInit();
         server.runLoop();
     }

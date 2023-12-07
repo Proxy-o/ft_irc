@@ -1,13 +1,12 @@
 #include "Client.hpp"
 
-Client::Client(int sockfd) 
+Client::Client(int sockfd)
 {
     this->_client_sockfd = sockfd;
     this->_recv_buffer = "";
     this->_send_buffer = "";
     this->_is_registered = false;
     this->_nickname = "";
-
 }
 
 Client::~Client()
@@ -33,14 +32,13 @@ bool Client::operator==(const Client &client) const
 bool Client::operator!=(const Client &client) const
 {
     // compare the two objects and return true if they are not equal
-    return !(*this == client); 
+    return !(*this == client);
 }
 
 void Client::resetRecvBuffer()
 {
     this->_recv_buffer = "";
 }
-
 
 void Client::setRecvBuffer(std::string buffer)
 {
@@ -104,4 +102,14 @@ void Client::setRealname(std::string realname)
 std::string Client::getRealname()
 {
     return this->_realname;
+}
+
+void Client::setPassIsCorrect(bool status)
+{
+    this->_pass_is_correct = status;
+}
+
+bool Client::passIsCorrect()
+{
+    return this->_pass_is_correct;
 }
