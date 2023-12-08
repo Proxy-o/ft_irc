@@ -37,6 +37,7 @@ private:
     std::map<int, Client> _clients;
 
 public:
+    Server();
     Server(std::string password, std::string port);
     ~Server();
     // ************SETTERS************

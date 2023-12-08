@@ -66,6 +66,7 @@ int Server::acceptNewConnection()
         return FAIL;
     }
     Client client(client_sockfd);
+    client.setServer(*this);
     this->_clients.insert(std::pair<int, Client>(client_sockfd, client));
     return client_sockfd;
 }

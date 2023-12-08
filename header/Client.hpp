@@ -2,10 +2,13 @@
 
 #include <sys/types.h>
 #include <iostream>
+#include "Server.hpp"
+class Server;
 
 class Client
 {
 private:
+    Server _server;
     std::string _username;
     std::string _realname;
     std::string _nickname;
@@ -17,6 +20,7 @@ private:
     bool _is_welcomed;
 
 public:
+    Client();
     Client(int sockfd);
     ~Client();
     Client &operator=(const Client &client);
@@ -24,6 +28,7 @@ public:
     bool operator!=(const Client &client) const;
 
     // ************SETTERS************
+    void setServer(Server &server);
     void setRecvBuffer(std::string buffer);
     void setIsRegistered(bool status);
     void setSendBuffer(std::string buffer);
@@ -34,6 +39,7 @@ public:
     void setIsWelcomed(bool status);
 
     // ************GETTERS************
+    Server &getServer();
     std::string getRecvBuffer();
     bool isRegistered();
     std::string getSendBuffer();

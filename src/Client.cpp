@@ -1,5 +1,9 @@
 #include "Client.hpp"
 
+Client::Client()
+{
+}
+
 Client::Client(int sockfd)
 {
     this->_client_sockfd = sockfd;
@@ -122,4 +126,14 @@ void Client::setIsWelcomed(bool status)
 bool Client::isWelcomed()
 {
     return this->_is_welcomed;
+}
+
+void Client::setServer(Server &server)
+{
+    this->_server = server;
+}
+
+Server &Client::getServer()
+{
+    return this->_server;
 }
