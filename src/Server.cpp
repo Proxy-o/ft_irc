@@ -57,7 +57,6 @@ int Server::runLoop()
         {
             throw std::runtime_error("poll Error");
         }
-
         for (std::vector<pollfd>::iterator it = poll_fds.begin(); it != poll_fds.end(); it++)
         {
             if (it->revents & POLLIN)

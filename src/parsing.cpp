@@ -12,7 +12,7 @@ int Server::parseMessage(int fd)
 {
     Client &client = this->getClient(fd);
     std::string message = client.getRecvBuffer();
-    if (message.find("\r\n") != std::string::npos)
+    if (message.find("\n") != std::string::npos)
     {
         std::vector<std::string> lines = ft_split(message, "\n");
         std::vector<std::string>::iterator it = lines.begin();
@@ -46,6 +46,7 @@ int Server::parseMessage(int fd)
                 }
             }
         }
+        client.resetRecvBuffer();
     }
     return SUCCESS;
 }
