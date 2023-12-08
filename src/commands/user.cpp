@@ -12,11 +12,11 @@ void user(std::string &message, Client &client)
         client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
         return;
     }
-    if (tokens[2] != "0" || tokens[3] != "*")
-    {
-        client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
-        return;
-    }
+    // if (tokens[2] != "0" || tokens[3] != "*")
+    // {
+    //     client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
+    //     return;
+    // }
     if (tokens.size() > 5 && tokens[4].find_first_of(":") == 0)
     {
         tokens[4].erase(0, 1);
