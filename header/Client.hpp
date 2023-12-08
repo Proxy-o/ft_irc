@@ -52,4 +52,5 @@ public:
     // ************METHODS************
     void resetRecvBuffer();
     void resetSendBuffer();
+    void setReplay(int replay);
 };
