@@ -32,6 +32,7 @@ private:
     std::string _creation_date;
     std::string _password;
     std::string _port;
+    std::string _hostname;
     int _serv_sockfd;
     std::map<int, Client> _clients;
 
@@ -40,9 +41,12 @@ public:
     ~Server();
     // ************SETTERS************
     void setCreationDate();
+    void setHostname(std::string hostname);
+
     // ************GETTERS************
     std::string getCreationDate();
     std::string getPassword();
+    std::string getHostname();
 
     // ************METHODS************
     int networkInit();

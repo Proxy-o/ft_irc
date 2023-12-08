@@ -154,3 +154,13 @@ std::string Server::getPassword()
 {
     return this->_password;
 }
+
+void Server::setHostname(std::string hostname)
+{
+    this->_hostname = hostname;
+}
+
+std::string Server::getHostname()
+{
+    return this->_hostname;
+}
