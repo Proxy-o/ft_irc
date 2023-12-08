@@ -8,31 +8,35 @@ static bool isValidData(Client &client)
     return true;
 }
 
-int Server::registerClient(Client &client, std::string message)
+int Server::registerClient(std::string line, Client &client)
 {
-    // TODO: handle multiple lines YOU ARE IN  A LOOP MTFK
-    std::vector<std::string> lines = ft_split(message, "\n");
-    std::vector<std::string>::iterator it = lines.begin();
-    for (; it != lines.end(); it++)
+    if (line.find("NICK") == 0)
     {
-        std::string line = *it;
-        formatMessage(line);
-        if (line.find("NICK") == 0)
-        {
-            nick(line, client, *this);
-        }
-        else if (line.find("USER") == 0)
-        {
-            user(line, client);
-        }
-        else if (line.find("PASS") == 0)
-        {
-            pass(line, client, *this);
-        }
-        if (isValidData(client) == true && client.isPassCorrect() == true)
+        nick(line, client, *this);
+    }
+    else if (line.find("USER") == 0)
+    {
+        user(line, client);
+    }
+    else if (line.find("PASS") == 0 && client.isRegistered() == false)
+    {
+        pass(line, client, *this);
+    }
+    else if (line.find("PASS") == 0 && client.isRegistered() == true)
+    {
+        client.setReplay(462);
+    }
+    if (isValidData(client) == true && client.isPassCorrect() == true)
+    {
+        client.setIsRegistered(true);
+        if (client.isWelcomed() == false)
         {
             client.setReplay(001);
-            client.setIsRegistered(true);
+            client.setReplay(002);
+            client.setReplay(003);
+            client.setReplay(004);
+            client.setReplay(005);
+            client.setIsWelcomed(true);
         }
     }
     return SUCCESS;

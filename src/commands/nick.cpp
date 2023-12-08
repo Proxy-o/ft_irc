@@ -7,6 +7,8 @@ static bool nickIsValid(std::string nickname)
         return false;
     if (nickname.find_first_of("123456789$:#") == 0)
         return false;
+    if (nickname.length() > 9)
+        return false;
     else
         return true;
 }

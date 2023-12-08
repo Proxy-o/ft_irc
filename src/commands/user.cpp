@@ -12,6 +12,11 @@ void user(std::string &message, Client &client)
         client.setReplay(461);
         return;
     }
+    if (client.isRegistered() == true)
+    {
+        client.setReplay(462);
+        return;
+    }
     // if (tokens[2] != "0" || tokens[3] != "*")
     // {
     //     client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
@@ -35,5 +40,4 @@ void user(std::string &message, Client &client)
         realName = tokens[4];
     client.setUsername(tokens[1]);
     client.setRealname(realName);
-    // TODO : send already registered message
 }
