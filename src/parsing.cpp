@@ -34,14 +34,14 @@ int Server::parseMessage(int fd)
             }
             else if (line.find("PASS") == 0 && client.isRegistered() == true)
             {
-                client.setSendBuffer(ERR_ALREADYREGISTERED(client.getNickname()));
+                client.setReplay(462);
             }
             if (isValidData(client) == true && client.isPassCorrect() == true)
             {
                 client.setIsRegistered(true);
                 if (client.isWelcomed() == false)
                 {
-                    client.setSendBuffer(RPL_WELCOME(client.getNickname()));
+                    client.setReplay(001);
                     client.setIsWelcomed(true);
                 }
             }

@@ -10,7 +10,6 @@
 #include <poll.h>
 #include <vector>
 #include <map>
-#include "Client.hpp"
 #include "utils.hpp"
 #include "irc_replies.hpp"
 
@@ -26,6 +25,7 @@
 #define WHITE "\033[1;37m"
 #define RESET "\033[0m"
 
+class Client;
 class Server
 {
 private:

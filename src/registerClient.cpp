@@ -31,7 +31,7 @@ int Server::registerClient(Client &client, std::string message)
         }
         if (isValidData(client) == true && client.isPassCorrect() == true)
         {
-            client.setSendBuffer(RPL_WELCOME(client.getNickname()));
+            client.setReplay(001);
             client.setIsRegistered(true);
         }
     }

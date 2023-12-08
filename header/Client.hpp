@@ -3,8 +3,8 @@
 #include <sys/types.h>
 #include <iostream>
 #include "Server.hpp"
-class Server;
 
+class Server;
 class Client
 {
 private:

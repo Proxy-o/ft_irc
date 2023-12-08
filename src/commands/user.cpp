@@ -9,7 +9,7 @@ void user(std::string &message, Client &client)
 
     if (tokens.size() < 5)
     {
-        client.setSendBuffer(ERR_NEEDMOREPARAMS(client.getNickname(), "USER"));
+        client.setReplay(461);
         return;
     }
     // if (tokens[2] != "0" || tokens[3] != "*")
