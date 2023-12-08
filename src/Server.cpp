@@ -58,8 +58,7 @@ int Server::runLoop()
             throw std::runtime_error("poll Error");
         }
 
-        std::vector<pollfd>::iterator it = poll_fds.begin();
-        for (; it != poll_fds.end(); it++)
+        for (std::vector<pollfd>::iterator it = poll_fds.begin(); it != poll_fds.end(); it++)
         {
             if (it->revents & POLLIN)
             {
@@ -102,8 +101,8 @@ int Server::runLoop()
                 }
             }
         }
-        std::vector<int>::iterator it2 = fds_to_add.begin();
-        for (; it2 != fds_to_add.end(); it2++)
+
+        for (std::vector<int>::iterator it2 = fds_to_add.begin(); it2 != fds_to_add.end(); it2++)
         {
             add_pollfd(poll_fds, POLLIN | POLLOUT, *it2);
         }
