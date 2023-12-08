@@ -38,6 +38,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         std::string message(buffer);
         Client &client = this->getClient(it->fd);
         client.setRecvBuffer(message);
+        PRINT(WHITE << "CLIENT : " << client.getRecvBuffer() << RESET);
         return SUCCESS;
     }
 
