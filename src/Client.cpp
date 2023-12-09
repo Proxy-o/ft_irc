@@ -137,3 +137,13 @@ Server &Client::getServer()
 {
     return this->_server;
 }
+
+void Client::setIsOperator(bool status)
+{
+    this->is_operator = status;
+}
+
+bool Client::isOperator()
+{
+    return this->is_operator;
+}

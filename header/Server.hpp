@@ -25,6 +25,8 @@
 #define WHITE "\033[1;37m"
 #define RESET "\033[0m"
 
+#define OPER_NAME "admin"
+#define OPER_PASS "pass_admin"
 class Client;
 class Server
 {

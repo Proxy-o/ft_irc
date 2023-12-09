@@ -13,9 +13,29 @@ int Server::parseMessage(int fd)
         {
             std::string line = *it;
             formatMessage(line);
-            registerClient(line, client);
+            if (client.isRegistered() == false)
+                registerClient(line, client);
+            else if (client.isRegistered())
+            {
+                if (line.find("NICK") == 0)
+                {
+                    nick(line, client, *this);
+                }
+                else if (line.find("USER") == 0)
+                {
+                    user(line, client);
+                }
+                else if (line.find("PASS") == 0)
+                {
+                    pass(line, client, *this);
+                }
+                else if (line.find("OPER") == 0)
+                {
+                    oper(line, client);
+                }
+            }
+            client.resetRecvBuffer();
         }
-        client.resetRecvBuffer();
     }
     return SUCCESS;
 }

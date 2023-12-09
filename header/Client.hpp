@@ -18,6 +18,7 @@ private:
     bool _is_registered;
     bool _pass_is_correct;
     bool _is_welcomed;
+    bool is_operator;
 
 public:
     Client();
@@ -37,6 +38,7 @@ public:
     void setRealname(std::string realname);
     void setIsPassCorrect(bool status);
     void setIsWelcomed(bool status);
+    void setIsOperator(bool status);
 
     // ************GETTERS************
     Server &getServer();
@@ -48,6 +50,7 @@ public:
     std::string getRealname();
     bool isPassCorrect();
     bool isWelcomed();
+    bool isOperator();
 
     // ************METHODS************
     void resetRecvBuffer();
