@@ -25,9 +25,10 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
 
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
-    char buffer[512];
+    char buffer[513];
     bzero(buffer, sizeof(buffer));
-    int recv_status = recv(it->fd, buffer, sizeof(buffer), 0);
+    PRINT("Waiting for message")
+    int recv_status = recv(it->fd, buffer, sizeof(buffer) - 1, 0);
     if (recv_status == -1)
     {
         PRINT_ERR(RED << "recv Error" << RESET);
@@ -35,6 +36,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
     }
     else if (recv_status == 0)
     {
+
         removeClient(poll_fds, it);
         return FAIL;
     }
@@ -43,7 +45,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         std::string message(buffer);
         Client &client = this->getClient(it->fd);
         client.setRecvBuffer(message);
-        PRINT(WHITE << "CLIENT : " << client.getRecvBuffer() << RESET);
+        PRINT(YELLOW << "CLIENT : " << client.getRecvBuffer() << RESET);
         return SUCCESS;
     }
 
