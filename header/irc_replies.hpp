@@ -23,3 +23,7 @@
 // PASS
 #define ERR_PASSWDMISMATCH(hostname, client) (":" + hostname + " 464 " + client + " :Password incorrect\r\n")
 #define ERR_ALREADYREGISTERED(hostname, client) (":" + hostname + " 462 " + client + " :You may not reregister.\r\n")
+
+// PRIVMSG
+#define ERR_NOSUCHNICK(hostname, client, nickname) (":" + hostname + " 401 " + client + " " + nickname + " :No such nick/channel\r\n")
+#define PRIVMSG(hostname, client, username, target, message) (":" + client + "!~" + username + "@" + hostname + " PRIVMSG " + target + " " + message + "\r\n")

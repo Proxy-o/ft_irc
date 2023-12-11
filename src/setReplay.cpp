@@ -25,6 +25,9 @@ void Client::setReplay(int replay)
     case 381:
         message = RPL_YOUREOPER(server.getHostname(), client.getNickname());
         break;
+    case 401:
+        message = ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), client.getNickname());
+        break;
     case 431:
         message = ERR_NONICKNAMEGIVEN(server.getHostname(), client.getNickname());
         break;

@@ -11,6 +11,7 @@ int Server::parseMessage(int fd)
         std::vector<std::string>::iterator it = lines.begin();
         for (; it != lines.end(); it++)
         {
+            std::cout << "line: " << *it << std::endl;
             std::string line = *it;
             formatMessage(line);
             if (client.isRegistered() == false)
@@ -32,6 +33,10 @@ int Server::parseMessage(int fd)
                 else if (line.find("OPER") == 0)
                 {
                     oper(line, client);
+                }
+                else if (line.find("PRIVMSG") == 0)
+                {
+                    privmsg(line, client, *this);
                 }
             }
             client.resetRecvBuffer();
