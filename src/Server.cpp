@@ -27,7 +27,6 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
 {
     char buffer[513];
     bzero(buffer, sizeof(buffer));
-    PRINT("Waiting for message")
     int recv_status = recv(it->fd, buffer, sizeof(buffer) - 1, 0);
     if (recv_status == -1)
     {

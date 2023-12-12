@@ -1,5 +1,5 @@
 #include "commands.hpp"
-#include "util.h"
+#include "utils.hpp"
 
 void oper(std::string &message, Client &client)
 {

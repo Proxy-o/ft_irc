@@ -11,7 +11,6 @@ int Server::parseMessage(int fd)
         std::vector<std::string>::iterator it = lines.begin();
         for (; it != lines.end(); it++)
         {
-            std::cout << "line: " << *it << std::endl;
             std::string line = *it;
             formatMessage(line);
             if (client.isRegistered() == false)
