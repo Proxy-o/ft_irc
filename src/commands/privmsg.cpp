@@ -23,7 +23,7 @@ void privmsg(std::string &message, Client &client, Server &server)
     Client &target = server.getClientByNickname(targetName);
     if (target == server.getClient(-1))
     {
-        client.setReplay(401);
+        client.setReplay(401, server);
 
         return;
     }
