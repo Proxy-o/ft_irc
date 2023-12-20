@@ -55,7 +55,7 @@ void Channel::setReplay(int replay, Server &server, Client &client)
         message = ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(),this->getName());
         break;
     case 100:
-        message = RPL_JOIN(client.getUsername(), client.getNickname(), client.getHostname(), this->getName());
+        message = RPL_JOIN(client.getUsername(), client.getNickname(), server.getHostname(), this->getName());
         break;
     case 101:
         message = RPL_MODE(server.getHostname(), this->getName(), "+" + this->getModes());

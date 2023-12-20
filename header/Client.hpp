@@ -11,7 +11,6 @@ private:
     std::string _username;
     std::string _realname;
     std::string _nickname;
-    std::string _hostname;
     int _client_sockfd;
     std::string _recv_buffer;
     std::string _send_buffer;
@@ -22,7 +21,7 @@ private:
 
 public:
     Client();
-    Client(int sockfd, sockaddr_storage client_addr);
+    Client(int sockfd);
     ~Client();
     Client &operator=(const Client &client);
     bool operator==(const Client &client) const;
@@ -46,7 +45,6 @@ public:
     std::string getNickname();
     std::string getUsername();
     std::string getRealname();
-    std::string getHostname();
     bool isPassCorrect();
     bool isWelcomed();
     bool isOperator();
@@ -56,6 +54,5 @@ public:
     void resetRecvBuffer();
     void resetSendBuffer();
     void setReplay(int replay, Server &server);
-    std::string getClientHostname(sockaddr_storage* addr);
 
 };
