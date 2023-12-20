@@ -21,9 +21,9 @@ void privmsg(std::string &message, Client &client, Server &server)
         msg = tokens[2];
     }
     Client &target = server.getClientByNickname(targetName);
-    if (target.getNickname() == "")
+    if (target == server.getClient(-1))
     {
-        target.setReplay(401);
+        client.setReplay(401);
         return;
     }
     target.setSendBuffer(PRIVMSG(server.getHostname(), client.getNickname(), client.getUsername(), target.getNickname(), msg));

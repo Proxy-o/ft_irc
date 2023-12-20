@@ -133,6 +133,11 @@ std::string Server::getCreationDate()
 }
 Client &Server::getClient(int fd)
 {
+    if (fd == -1)
+    {
+        std::map<int, Client>::iterator it = this->_clients.end();
+        return it->second;
+    }
     std::map<int, Client>::iterator it = this->_clients.find(fd);
     if (it != this->_clients.end())
     {
