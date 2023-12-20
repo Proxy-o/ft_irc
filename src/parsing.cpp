@@ -17,8 +17,8 @@ int Server::parseMessage(int fd)
             formatMessage(line);
             if (client.isRegistered() == false)
                 registerClient(line, client);
-            // else if (client.isRegistered())
-            // {
+            else if (client.isRegistered())
+            {
                 if (line.find("NICK") == 0)
                 {
                     nick(line, client, *this);
@@ -43,7 +43,7 @@ int Server::parseMessage(int fd)
                 {
                     join(line, client, *this);
                 }
-            // }
+            }
             client.resetRecvBuffer();
         }
     }
