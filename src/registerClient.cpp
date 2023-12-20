@@ -16,7 +16,7 @@ int Server::registerClient(std::string line, Client &client)
     }
     else if (line.find("USER") == 0)
     {
-        user(line, client);
+        user(line, client, *this);
     }
     else if (line.find("PASS") == 0 && client.isRegistered() == false)
     {
@@ -24,18 +24,18 @@ int Server::registerClient(std::string line, Client &client)
     }
     else if (line.find("PASS") == 0 && client.isRegistered() == true)
     {
-        client.setReplay(462);
+        client.setReplay(462, *this);
     }
     if (isValidData(client) == true && client.isPassCorrect() == true)
     {
         client.setIsRegistered(true);
         if (client.isWelcomed() == false)
         {
-            client.setReplay(001);
-            client.setReplay(002);
-            client.setReplay(003);
-            client.setReplay(004);
-            client.setReplay(005);
+            client.setReplay(001, *this);
+            client.setReplay(002, *this);
+            client.setReplay(003, *this);
+            client.setReplay(004, *this);
+            client.setReplay(005, *this);
             client.setIsWelcomed(true);
         }
     }

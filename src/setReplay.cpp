@@ -1,10 +1,10 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
-void Client::setReplay(int replay)
+void Client::setReplay(int replay, Server &server)
 {
     std::string message;
     Client &client = *this;
-    Server &server = client.getServer();
     switch (replay)
     {
     case 001:
@@ -39,6 +39,32 @@ void Client::setReplay(int replay)
         break;
     case 464:
         message = ERR_PASSWDMISMATCH(server.getHostname(), client.getNickname());
+        break;
+    default:
+        message = "NOT IMPLEMENTED YET\r\n";
+        break;
+    }
+    client.setSendBuffer(message);
+}
+void Channel::setReplay(int replay, Server &server, Client &client)
+{
+    std::string message;
+    switch (replay)
+    {
+    case 403:
+        message = ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(),this->getName());
+        break;
+    case 100:
+        message = RPL_JOIN(client.getUsername(), client.getNickname(), client.getHostname(), this->getName());
+        break;
+    case 101:
+        message = RPL_MODE(server.getHostname(), this->getName(), "+" + this->getModes());
+        break;
+    case 353:
+        message = RPL_NAMREPLY(server.getHostname(), client.getNickname(), this->getName(), client.getNickname());
+        break;
+    case 366:
+        message = RPL_ENDOFNAMES(server.getHostname(), client.getNickname(), this->getName());
         break;
     default:
         message = "NOT IMPLEMENTED YET\r\n";

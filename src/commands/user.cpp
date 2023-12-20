@@ -1,6 +1,6 @@
 #include "commands.hpp"
 
-void user(std::string &message, Client &client)
+void user(std::string &message, Client &client, Server &server)
 {
 
     std::vector<std::string> tokens = ft_split(message, " ");
@@ -9,12 +9,12 @@ void user(std::string &message, Client &client)
 
     if (tokens.size() < 5)
     {
-        client.setReplay(461);
+        client.setReplay(461, server);
         return;
     }
     if (client.isRegistered() == true)
     {
-        client.setReplay(462);
+        client.setReplay(462, server);
         return;
     }
     // if (tokens[2] != "0" || tokens[3] != "*")

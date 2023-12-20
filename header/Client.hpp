@@ -8,10 +8,10 @@ class Server;
 class Client
 {
 private:
-    Server _server;
     std::string _username;
     std::string _realname;
     std::string _nickname;
+    std::string _hostname;
     int _client_sockfd;
     std::string _recv_buffer;
     std::string _send_buffer;
@@ -22,14 +22,13 @@ private:
 
 public:
     Client();
-    Client(int sockfd);
+    Client(int sockfd, sockaddr_storage client_addr);
     ~Client();
     Client &operator=(const Client &client);
     bool operator==(const Client &client) const;
     bool operator!=(const Client &client) const;
 
     // ************SETTERS************
-    void setServer(Server &server);
     void setRecvBuffer(std::string buffer);
     void setIsRegistered(bool status);
     void setSendBuffer(std::string buffer);
@@ -41,19 +40,22 @@ public:
     void setIsOperator(bool status);
 
     // ************GETTERS************
-    Server &getServer();
     std::string getRecvBuffer();
     bool isRegistered();
     std::string getSendBuffer();
     std::string getNickname();
     std::string getUsername();
     std::string getRealname();
+    std::string getHostname();
     bool isPassCorrect();
     bool isWelcomed();
     bool isOperator();
+    int getClientSockfd();
 
     // ************METHODS************
     void resetRecvBuffer();
     void resetSendBuffer();
-    void setReplay(int replay);
+    void setReplay(int replay, Server &server);
+    std::string getClientHostname(sockaddr_storage* addr);
+
 };

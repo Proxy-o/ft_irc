@@ -5,6 +5,7 @@ int Server::parseMessage(int fd)
 {
     Client &client = this->getClient(fd);
     std::string message = client.getRecvBuffer();
+    // PRINT("message: " + message);
     if (message.find("\n") != std::string::npos)
     {
 
@@ -16,15 +17,15 @@ int Server::parseMessage(int fd)
             formatMessage(line);
             if (client.isRegistered() == false)
                 registerClient(line, client);
-            else if (client.isRegistered())
-            {
+            // else if (client.isRegistered())
+            // {
                 if (line.find("NICK") == 0)
                 {
                     nick(line, client, *this);
                 }
                 else if (line.find("USER") == 0)
                 {
-                    user(line, client);
+                    user(line, client, *this);
                 }
                 else if (line.find("PASS") == 0)
                 {
@@ -32,13 +33,17 @@ int Server::parseMessage(int fd)
                 }
                 else if (line.find("OPER") == 0)
                 {
-                    oper(line, client);
+                    oper(line, client, *this);
                 }
                 else if (line.find("PRIVMSG") == 0)
                 {
                     privmsg(line, client, *this);
                 }
-            }
+                else if (line.find("JOIN") == 0)
+                {
+                    join(line, client, *this);
+                }
+            // }
             client.resetRecvBuffer();
         }
     }

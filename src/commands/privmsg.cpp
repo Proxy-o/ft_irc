@@ -5,7 +5,7 @@ void privmsg(std::string &message, Client &client, Server &server)
     std::vector<std::string> tokens = ft_split(message, " ");
     if (tokens.size() < 3)
     {
-        client.setReplay(461);
+        client.setReplay(461, server);
         return;
     }
     std::string targetName = tokens[1];
@@ -24,6 +24,7 @@ void privmsg(std::string &message, Client &client, Server &server)
     if (target == server.getClient(-1))
     {
         client.setReplay(401);
+
         return;
     }
     target.setSendBuffer(PRIVMSG(server.getHostname(), client.getNickname(), client.getUsername(), target.getNickname(), msg));

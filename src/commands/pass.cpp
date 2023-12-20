@@ -8,14 +8,14 @@ void pass(std::string &message, Client &client, Server &server)
     client.setRealname("");
     if (tokens.size() < 2)
     {
-        client.setReplay(461);
+        client.setReplay(461, server);
         return;
     }
     if (tokens[1] == server.getPassword())
         client.setIsPassCorrect(true);
     else
     {
-        client.setReplay(464);
+        client.setReplay(464, server);
         client.setIsPassCorrect(false);
     }
 

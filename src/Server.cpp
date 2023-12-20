@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 
 Server::Server()
 {
@@ -174,4 +175,9 @@ void Server::setHostname(std::string hostname)
 std::string Server::getHostname()
 {
     return this->_hostname;
+}
+
+std::vector<Channel> &Server::getChannels()
+{
+    return this->_channels;
 }

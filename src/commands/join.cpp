@@ -1,0 +1,71 @@
+#include "Channel.hpp"
+
+void join(std::string &message, Client &client, Server &server)
+{
+    std::vector<std::string> keys;
+    std::vector<std::string> params = ft_split(message, " ");
+    // PRINT("JOIN");
+    if (params.size() < 2)
+    {
+        client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "JOIN"));
+        return;
+    }
+    std::vector<std::string> channels = ft_split(params[1], ",");
+    if (params.size() == 3)
+        keys = ft_split(params[2], ",");
+    for (size_t i = 0; i < channels.size(); i++)
+    {
+        if (channels[i].find_first_of(" ,\a\n\t\r\v\b\f\r\n") != std::string::npos)
+            continue;
+        if (channels[i][0] != '#')
+        {
+            channels[i] = "#" + channels[i];
+        }
+        std::vector<Channel>::iterator it = server.getChannels().begin();
+        bool channel_exist = false;
+        for (; it != server.getChannels().end(); it++)
+        {
+            if (it->getName() == channels[i])
+            {
+                channel_exist = true;
+                break;
+            }
+        }
+        if (!channel_exist)
+        {
+            Channel new_channel(&client, client.getClientSockfd());
+            new_channel.setName(channels[i]);
+            server.getChannels().push_back(new_channel);
+            it = server.getChannels().end() - 1;
+        }
+        else
+        {
+            it->addClient(client);
+        }
+        it->setReplay(100, server, client);
+        it->setReplay(101, server, client);
+        it->setReplay(353, server, client);
+        it->setReplay(366, server, client);
+            // if (it->isInviteOnly() && !it->isInvited(client))
+            // {
+            //     client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), channels[i]));
+            //     continue;
+            // }
+            // if (it->isFull())
+            // {
+            //     client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), channels[i]));
+            //     continue;
+            // }
+        //     if (it->isBanned(client.getClientSockfd()))
+        //     {
+        //         client.setSendBuffer(ERR_BANNEDFROMCHAN(server.getHostname(), client.getNickname(), channels[i]));
+        //         continue;
+        //     }
+        //     if (it->isOperator(client.getClientSockfd()))
+        //     {
+        //         client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channels[i]));
+        //         continue;
+        //     }
+        // }
+    }
+}

@@ -12,6 +12,8 @@
 #include <map>
 #include "utils.hpp"
 #include "irc_replies.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
 #define PRINT(x) std::cout << x << std::endl;
 #define PRINT_ERR(x) std::cerr << x << std::endl;
@@ -28,6 +30,7 @@
 #define OPER_NAME "admin"
 #define OPER_PASS "pass_admin"
 class Client;
+class Channel;
 class Server
 {
 private:
@@ -37,6 +40,8 @@ private:
     std::string _hostname;
     int _serv_sockfd;
     std::map<int, Client> _clients;
+    std::vector<Channel> _channels;
+    
 
 public:
     Server();
@@ -50,6 +55,7 @@ public:
     std::string getCreationDate();
     std::string getPassword();
     std::string getHostname();
+    std::vector<Channel> &getChannels();
 
     // ************METHODS************
     int networkInit();
