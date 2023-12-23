@@ -11,6 +11,7 @@ private:
     std::string _username;
     std::string _realname;
     std::string _nickname;
+    std::string _hostname;
     int _client_sockfd;
     std::string _recv_buffer;
     std::string _send_buffer;
@@ -34,6 +35,7 @@ public:
     void setNickname(std::string nickname);
     void setUsername(std::string username);
     void setRealname(std::string realname);
+    void setHostname(std::string hostname);
     void setIsPassCorrect(bool status);
     void setIsWelcomed(bool status);
     void setIsOperator(bool status);
@@ -45,6 +47,7 @@ public:
     std::string getNickname();
     std::string getUsername();
     std::string getRealname();
+    std::string getHostname();
     bool isPassCorrect();
     bool isWelcomed();
     bool isOperator();
@@ -54,5 +57,7 @@ public:
     void resetRecvBuffer();
     void resetSendBuffer();
     void setReplay(int replay, Server &server);
+    std::string getClientHostname();
+
 
 };

@@ -148,6 +148,24 @@ Client &Server::getClient(int fd)
     return it->second;
 }
 
+Channel &Server::getChannel(std::string name)
+{
+    if (name == "")
+        return *(this->_channels.end());
+    if (name[0] != '#')
+        name = "#" + name;
+    std::vector<Channel>::iterator it = this->_channels.begin();
+    for (; it != this->_channels.end(); it++)
+    {
+        if (it->getName() == name)
+        {
+            return *it;
+        }
+    }
+    it = this->_channels.end();
+    return *it;
+}
+
 Client &Server::getClientByNickname(std::string nickname)
 {
     std::map<int, Client>::iterator it = this->_clients.begin();
@@ -160,6 +178,24 @@ Client &Server::getClientByNickname(std::string nickname)
     }
     it = this->_clients.end();
     return it->second;
+}
+
+Channel &Server::getChannelByName(std::string name)
+{
+    if (name == "")
+        return *(this->_channels.end());
+    if (name[0] != '#')
+        name = "#" + name;
+    std::vector<Channel>::iterator it = this->_channels.begin();
+    for (; it != this->_channels.end(); it++)
+    {
+        if (it->getName() == name)
+        {
+            return *it;
+        }
+    }
+    it = this->_channels.end();
+    return *it;
 }
 
 std::string Server::getPassword()

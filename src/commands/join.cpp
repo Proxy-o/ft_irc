@@ -17,7 +17,7 @@ void join(std::string &message, Client &client, Server &server)
     {
         if (channels[i].find_first_of(" ,\a\n\t\r\v\b\f\r\n") != std::string::npos)
             continue;
-        if (channels[i][0] != '#')
+        if (channels[i][0] != '#') // &
         {
             channels[i] = "#" + channels[i];
         }
@@ -37,15 +37,26 @@ void join(std::string &message, Client &client, Server &server)
             new_channel.setName(channels[i]);
             server.getChannels().push_back(new_channel);
             it = server.getChannels().end() - 1;
+            it->addClient(client);
+            it->addop(client);
+
         }
         else
         {
+            if (it->clientExist(client))
+            {
+                it->setReplay(102, server, client);
+                continue;
+            }
             it->addClient(client);
         }
-        it->setReplay(100, server, client);
+        std::string realname = (client.getRealname().find_last_of(" ") != std::string::npos) ? ":" + client.getRealname() : client.getRealname();
+        it->sendMessageToAll(RPL_JOIN(client.getUsername(), it->isOp(client), client.getNickname(), client.getHostname(), it->getName(), client.getRealname()));
         it->setReplay(101, server, client);
         it->setReplay(353, server, client);
+        it->setReplay(103, server, client);
         it->setReplay(366, server, client);
+        it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
             // if (it->isInviteOnly() && !it->isInvited(client))
             // {
             //     client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), channels[i]));
