@@ -12,7 +12,6 @@ int Server::parseMessage(int fd)
 {
     Client &client = this->getClient(fd);
     std::string message = client.getRecvBuffer();
-    // PRINT("message: " + message);
     if (message.find("\n") != std::string::npos)
     {
 
