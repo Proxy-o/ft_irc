@@ -30,10 +30,6 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
     close(it->fd);
     poll_fds.erase(it);
     PRINT(RED << "Client disconnected" << RESET);
-    
-
-
-
 }
 
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
@@ -41,26 +37,22 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
     char buffer[513];
     bzero(buffer, sizeof(buffer));
     int recv_status = recv(it->fd, buffer, sizeof(buffer) - 1, 0);
-    if (recv_status == -1)
+    if (recv_status <= 0)
     {
-        PRINT_ERR(RED << "recv Error" << RESET);
-        return FAIL;
-    }
-    else if (recv_status == 0)
-    {
-
+        if (recv_status == -1)
+            PRINT_ERR(RED << "recv Error" << RESET);
         removeClient(poll_fds, it);
         return FAIL;
     }
-    else
+    std::string message(buffer);
+    Client &client = this->getClient(it->fd);
+    if (message.find("\n") == std::string::npos && (client.getRecvBuffer().length() >= 512 || message.length() >= 512))
     {
-        std::string message(buffer);
-        Client &client = this->getClient(it->fd);
-        client.setRecvBuffer(message);
-        PRINT(YELLOW << "CLIENT : " << client.getRecvBuffer() << RESET);
-        return SUCCESS;
+        client.resetRecvBuffer();
+        return FAIL;
     }
-
+    client.setRecvBuffer(message);
+    PRINT(YELLOW << "<= CLIENT  " << client.getNickname() << " : " << client.getRecvBuffer() << RESET);
     return SUCCESS;
 }
 
@@ -106,6 +98,7 @@ int Server::runLoop()
                 std::string message = client.getSendBuffer();
                 if (message != "")
                 {
+                    PRINT(BLUE << "=> SERVER  : " << message << RESET);
                     int send_status = send(it->fd, message.c_str(), message.length(), 0);
                     if (send_status == -1)
                     {
