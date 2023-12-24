@@ -3,7 +3,8 @@
 
 static bool isValidCommand(std::string line)
 {
-    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0)
+    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 
+    || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0 || line.find("PING") == 0 || line.find("PONG") == 0)
         return true;
     return false;
 }
@@ -24,8 +25,8 @@ int Server::parseMessage(int fd)
             formatMessage(line);
             if (client.isRegistered() == false && isValidCommand(line) == true)
                 registerClient(line, client);
-            // else if (client.isRegistered() && isValidCommand(line) == true)
-            // {
+            else if (client.isRegistered() && isValidCommand(line) == true)
+            {
                 if (line.find("NICK") == 0)
                 {
                     nick(line, client, *this);
@@ -50,11 +51,16 @@ int Server::parseMessage(int fd)
                 {
                     join(line, client, *this);
                 }
-            //  }
-            //     else
-            //     {
-            //         client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
-            //     }
+                else if (line.find("PONG") == 0 || line.find("PING") == 0)
+                {
+                    ping_pong(line, client);
+                }
+            
+             }
+                else
+                {
+                    client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
+                }
             client.resetRecvBuffer();
         }
     }
