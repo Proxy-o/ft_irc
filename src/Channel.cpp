@@ -165,7 +165,6 @@ void Channel::sendMessageToAll(std::string message)
     std::map<int, Client &>::iterator it = this->_clients.begin();
     for (; it != this->_clients.end(); it++)
     {
-        PRINT("SENDING TO: " + it->second.getNickname());
         it->second.setSendBuffer(message);
     }
 }

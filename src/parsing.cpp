@@ -1,6 +1,13 @@
 #include "Server.hpp"
 #include "commands.hpp"
 
+static bool isValidCommand(std::string line)
+{
+    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0)
+        return true;
+    return false;
+}
+
 int Server::parseMessage(int fd)
 {
     Client &client = this->getClient(fd);
@@ -15,10 +22,10 @@ int Server::parseMessage(int fd)
         {
             std::string line = *it;
             formatMessage(line);
-            if (client.isRegistered() == false)
+            if (client.isRegistered() == false && isValidCommand(line) == true)
                 registerClient(line, client);
-            // else if (client.isRegistered())
-            // {
+            else if (client.isRegistered() && isValidCommand(line) == true)
+            {
                 if (line.find("NICK") == 0)
                 {
                     nick(line, client, *this);
@@ -43,7 +50,11 @@ int Server::parseMessage(int fd)
                 {
                     join(line, client, *this);
                 }
-            // }
+             }
+                else
+                {
+                    client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
+                }
             client.resetRecvBuffer();
         }
     }
