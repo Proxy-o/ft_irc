@@ -9,12 +9,16 @@ void privmsg(std::string &message, Client &client, Server &server)
         return;
     }
     std::string targetName = tokens[1];
-    std::string msg;
-    // find in the message the first occurence of ":"
-    std::size_t pos = message.find(":");
-    if (pos != std::string::npos)
+    std::string msg;    
+    if (tokens[2].find(":") == 0)
     {
-        msg = message.substr(pos);
+        // join the rest of the tokens
+        for (size_t i = 2; i < tokens.size(); i++)
+        {
+            msg += tokens[i];
+            if (i != tokens.size() - 1)
+                msg += " ";
+        }
     }
     else
     {
