@@ -158,6 +158,8 @@ std::string Channel::isOp(Client &client)
 void Channel::removeClient(Client &client)
 {
     this->_clients.erase(client.getClientSockfd());
+    if (this->isOp(client) == "@")
+        this->_chan_ops.erase(client.getClientSockfd());
 }
 
 void Channel::sendMessageToAll(std::string message)
