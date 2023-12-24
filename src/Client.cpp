@@ -5,7 +5,7 @@ Client::Client()
 }
 
 
-Client::Client(int sockfd, sockaddr_storage client_addr)
+Client::Client(int sockfd)
 {
     this->_client_sockfd = sockfd;
     this->_recv_buffer = "";
@@ -13,23 +13,7 @@ Client::Client(int sockfd, sockaddr_storage client_addr)
     this->_is_registered = false;
     this->_is_welcomed = false;
     this->_nickname = "";
-    this->_hostname = getClientHostname(&client_addr);
-    PRINT(BLUE << "Client connected from " << this->_hostname << RESET);
-}
-// #include <arpa/inet.h>
-
-std::string Client::getClientHostname(sockaddr_storage* addr) {
-    char hostname[NI_MAXHOST];
-
-    // Use getnameinfo to get the hostname
-    int result = getnameinfo((struct sockaddr*)addr, sizeof(struct sockaddr_storage),
-                             hostname, NI_MAXHOST, nullptr, 0, 0);
-
-    if (result != 0) {
-        PRINT_ERR(RED << "getnameinfo Error" << RESET);
-    }
-
-    return std::string(hostname);
+    this->_hostname = getClientHostname();
 }
 
 Client::~Client()
@@ -122,6 +106,11 @@ void Client::setRealname(std::string realname)
     this->_realname = realname;
 }
 
+void Client::setHostname(std::string hostname)
+{
+    this->_hostname = hostname;
+}
+
 std::string Client::getRealname()
 {
     return this->_realname;
@@ -160,6 +149,21 @@ bool Client::isOperator()
 int Client::getClientSockfd()
 {
     return this->_client_sockfd;
+}
+
+std::string Client::getClientHostname() {
+    char hostname[NI_MAXHOST];
+    struct sockaddr_storage addr;
+    socklen_t len = sizeof(addr);
+
+    getpeername(this->_client_sockfd, (struct sockaddr*)&addr, &len);
+    int result = getnameinfo((struct sockaddr*)&addr, sizeof(struct sockaddr_storage),
+                             hostname, NI_MAXHOST, nullptr, 0, 0);
+    if (result != 0) {
+        return gai_strerror(result);    
+    }
+
+    return std::string(hostname);
 }
 
 std::string Client::getHostname()

@@ -54,14 +54,27 @@ void Channel::setReplay(int replay, Server &server, Client &client)
     case 403:
         message = ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(),this->getName());
         break;
-    case 100:
-        message = RPL_JOIN(client.getUsername(), client.getNickname(), client.getHostname(), this->getName());
-        break;
     case 101:
         message = RPL_MODE(server.getHostname(), this->getName(), "+" + this->getModes());
         break;
+    case 102:
+        message = ERR_USERONCHANNEL(server.getHostname(), client.getUsername(), client.getNickname(), this->getName());
+        break;
+    case 103:
+        {
+            std::map<int, Client &>::iterator it = this->getClients().begin();
+            for (; it != this->getClients().end(); it++)
+            {
+                if (it->second == client)
+                    continue;
+                message += this->isOp(it->second);
+                message += it->second.getNickname() + " ";
+            }
+            message += "\r\n";
+            break;
+        }
     case 353:
-        message = RPL_NAMREPLY(server.getHostname(), client.getNickname(), this->getName(), client.getNickname());
+        message = RPL_NAMREPLY(server.getHostname(), client.getNickname(), this->getName());
         break;
     case 366:
         message = RPL_ENDOFNAMES(server.getHostname(), client.getNickname(), this->getName());

@@ -22,7 +22,7 @@ private:
 
 public:
     Client();
-    Client(int sockfd, sockaddr_storage client_addr);
+    Client(int sockfd);
     ~Client();
     Client &operator=(const Client &client);
     bool operator==(const Client &client) const;
@@ -35,6 +35,7 @@ public:
     void setNickname(std::string nickname);
     void setUsername(std::string username);
     void setRealname(std::string realname);
+    void setHostname(std::string hostname);
     void setIsPassCorrect(bool status);
     void setIsWelcomed(bool status);
     void setIsOperator(bool status);
@@ -56,6 +57,7 @@ public:
     void resetRecvBuffer();
     void resetSendBuffer();
     void setReplay(int replay, Server &server);
-    std::string getClientHostname(sockaddr_storage* addr);
+    std::string getClientHostname();
+
 
 };

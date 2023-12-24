@@ -25,6 +25,9 @@ public:
     Channel();
     Channel(Client *op, int op_fd);
     ~Channel();
+    Channel &operator=(const Channel &channel);
+    bool operator==(const Channel &channel) const;
+    bool operator!=(const Channel &channel) const;
     // ************SETTERS************
     void setOperator(Client *op, int op_fd);
     void setTopic(std::string topic);
@@ -39,13 +42,20 @@ public:
     std::string getName();
     std::string getPassword();
     std::string getModes();
+    Channel &getChannelByName(std::string name);
     bool isPrivate();
     bool isSecret();
     bool isInviteOnly();
+    std::map<int, Client &> &getClients();
+    std::map<int, Client &> &getChanOps();
 
     // ************METHODS************
     void addClient(Client &client);
+    void addop(Client &client);
+    std::string isOp(Client &client);
     void removeClient(Client &client);
     void sendMessageToAll(std::string message);
+    void sendMessageToAllExcept(std::string message, Client &client);
     void setReplay(int replay, Server &server, Client &client);
+    bool clientExist(Client &client);
 };
