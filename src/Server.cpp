@@ -18,10 +18,22 @@ Server::~Server()
 
 void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
 {
-    close(it->fd);
+    std::vector<Channel>::iterator it2 = this->_channels.begin();
+    for (; it2 != this->_channels.end(); it2++)
+    {
+        if (it2->clientExist(this->getClient(it->fd)))
+        {
+            it2->removeClient(this->getClient(it->fd));
+        }
+    }
     this->_clients.erase(it->fd);
+    close(it->fd);
     poll_fds.erase(it);
-    PRINT(BLUE << "Client disconnected" << RESET);
+    PRINT(RED << "Client disconnected" << RESET);
+    
+
+
+
 }
 
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
