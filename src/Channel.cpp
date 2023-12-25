@@ -192,3 +192,25 @@ bool Channel::clientExist(Client &client)
     }
     return (false);
 }
+
+
+void Channel::setTopicSetter(std::string setter)
+{
+    this->_topic_setter = setter;
+}
+
+void Channel::setTopicDate()
+{
+    this->_topic_date = std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+
+}
+
+std::string Channel::getTopicSetter()
+{
+    return (this->_topic_setter);
+}
+
+std::string Channel::getTopicDate()
+{
+    return (this->_topic_date);
+}

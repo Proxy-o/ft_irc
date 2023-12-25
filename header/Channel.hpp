@@ -14,6 +14,8 @@ private:
     std::map<int, Client &> _clients;
     std::map<int, Client &> _chan_ops;
     std::string _topic;
+    std::string _topic_setter;
+    std::string _topic_date;
     std::string _name;
     std::string _password;
     bool _isPrivate;
@@ -28,6 +30,7 @@ public:
     Channel &operator=(const Channel &channel);
     bool operator==(const Channel &channel) const;
     bool operator!=(const Channel &channel) const;
+
     // ************SETTERS************
     void setOperator(Client *op, int op_fd);
     void setTopic(std::string topic);
@@ -36,6 +39,8 @@ public:
     void setIsPrivate(bool status);
     void setIsSecret(bool status);
     void setIsInviteOnly(bool status);
+    void setTopicSetter(std::string setter);
+    void setTopicDate();
 
     // ************GETTERS************
     std::string getTopic();
@@ -48,6 +53,8 @@ public:
     bool isInviteOnly();
     std::map<int, Client &> &getClients();
     std::map<int, Client &> &getChanOps();
+    std::string getTopicSetter();
+    std::string getTopicDate();
 
     // ************METHODS************
     void addClient(Client &client);

@@ -29,8 +29,10 @@
 
 #define OPER_NAME "admin"
 #define OPER_PASS "pass_admin"
+
 class Client;
 class Channel;
+
 class Server
 {
 private:

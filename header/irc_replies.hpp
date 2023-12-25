@@ -29,10 +29,16 @@
 #define PRIVMSG(hostname, client, username, target, message) (":" + client + "!~" + username + "@" + hostname + " PRIVMSG " + target + " " + message + "\r\n")
 
 
-// JOIN
+// CHANNEL
 #define ERR_NOSUCHCHANNEL(hostname, client, channel_name) (":" + hostname + " 403 " + client + " " + channel_name + " :No such channel\r\n")
 #define RPL_JOIN(clientname, isop, clientnick, hostname, channel_name, real_name) (":" + clientname + "!~" + isop + clientnick + "@" +hostname + " JOIN :" + channel_name + " *" + real_name + "\r\n")
 #define RPL_MODE(hostname, channel_name, modes) (":" + hostname + " MODE " + channel_name + " " + modes + "\r\n")
 #define RPL_NAMREPLY(hostname, client, channel_name) (":" + hostname + " 353 " + client + " = " + channel_name + " :")
 #define RPL_ENDOFNAMES(hostname, client, channel_name) (":" + hostname + " 366 " + client + " " + channel_name + " :End of NAMES list\r\n")
 #define ERR_USERONCHANNEL(hostname, clientname, clientnick, channel_name) (":" + hostname + " " + clientname + " " + clientnick + " " + channel_name + " :is already on channel\r\n")
+
+// TOPIC
+#define RPL_NOTOPIC(hostname, client, channel_name) (":" + hostname + " 331 " + client + " " + channel_name + " :No topic is set\r\n")
+#define RPL_TOPIC(hostname, client, channel_name, topic) (":" + hostname + " 332 " + client + " " + channel_name + " :" + topic + "\r\n")
+#define RPL_TOPICWHOTIME(hostname, client, channel_name, topic_setter, topic_date) (":" + hostname + " 333 " + client + " " + channel_name + " " + topic_setter + " " + topic_date + "\r\n")
+#define ERR_NOTONCHANNEL(hostname, client, channel_name) (":" + hostname + " 442 " + client + " " + channel_name + " :You're not on that channel\r\n")
