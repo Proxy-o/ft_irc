@@ -48,4 +48,5 @@ void kick(std::string &message, Client &client, Server &server)
         }
     }
     channel.sendMessageToAll(RPL_KICK(server.getHostname(), channel.getName(), client.getNickname(), client_to_kick.getNickname(), reason));
+    channel.removeClient(client_to_kick);
 }

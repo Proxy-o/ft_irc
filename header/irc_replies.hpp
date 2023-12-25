@@ -45,4 +45,4 @@
 // KICK
 #define ERR_NOTONCHANNEL(hostname, client, channel_name) (":" + hostname + " 442 " + client + " " + channel_name + " :You're not on that channel\r\n")
 #define ERR_USERNOTINCHANNEL(hostname, client, nickname, channel_name) (":" + hostname + " 441 " + client + " " + nickname + " " + channel_name + " :They aren't on that channel\r\n")
-#define RPL_KICK(hostname, channel_name, kicker, to_kick, reason) (":" + hostname + " 441 " + channel_name + " " + kicker + " " + to_kick + " :" + reason + "\r\n")
+#define RPL_KICK(hostname, channel_name, kicker, to_kick, reason) (":" + kicker + "@" + hostname + " KICK " + channel_name + " " + to_kick + " " + reason + "\r\n")

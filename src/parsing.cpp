@@ -60,7 +60,10 @@ int Server::parseMessage(int fd)
                 {
                     topic(line, client, *this);
                 }
-            
+                else if (line.find("KICK") == 0)
+                {
+                    kick(line, client, *this);
+                }
              }
                 else
                 {
