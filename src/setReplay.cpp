@@ -79,6 +79,12 @@ void Channel::setReplay(int replay, Server &server, Client &client)
     case 366:
         message = RPL_ENDOFNAMES(server.getHostname(), client.getNickname(), this->getName());
         break;
+    case 332:
+        message = RPL_TOPIC(server.getHostname(), client.getNickname(), this->getName(), this->getTopic());
+        break;
+    case 333:
+        message = RPL_TOPICWHOTIME(server.getHostname(), client.getNickname(), this->getName(), this->getTopicSetter(), this->getTopicDate());
+        break;
     default:
         message = "NOT IMPLEMENTED YET\r\n";
         break;

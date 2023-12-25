@@ -194,9 +194,11 @@ bool Channel::clientExist(Client &client)
 }
 
 
-void Channel::setTopicSetter(std::string setter)
+void Channel::setTopicSetter(Client &setter)
 {
-    this->_topic_setter = setter;
+    std::string setter_name = setter.getNickname() + "!" + setter.getUsername() + "@" + setter.getHostname();
+    this->_topic_setter = setter_name;
+
 }
 
 void Channel::setTopicDate()

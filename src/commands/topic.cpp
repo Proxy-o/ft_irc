@@ -44,7 +44,7 @@ void topic(std::string &message, Client &client, Server &server)
             msg = tokens[2];
         }
         channel.setTopic(msg);
-        channel.setTopicSetter(client.getNickname());
+        channel.setTopicSetter(client);
         channel.setTopicDate();
         channel.sendMessageToAll(RPL_TOPIC(server.getHostname(), client.getNickname(), channel.getName(), channel.getTopic()));
     }

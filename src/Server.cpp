@@ -52,7 +52,8 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         return FAIL;
     }
     client.setRecvBuffer(message);
-    PRINT(YELLOW << "<= CLIENT  " << client.getNickname() << " : " << client.getRecvBuffer() << RESET);
+    if (message.find("PING") != 0 && message.find("PONG") != 0)
+        PRINT(YELLOW << "<= CLIENT  " << client.getNickname() << " : " << client.getRecvBuffer() << RESET);
     return SUCCESS;
 }
 
@@ -98,7 +99,9 @@ int Server::runLoop()
                 std::string message = client.getSendBuffer();
                 if (message != "")
                 {
-                    PRINT(BLUE << "=> SERVER  : " << message << RESET);
+                    // DO NOT PRINT PING PONG
+                    if (message.find("PING") != 0 && message.find("PONG") != 0)
+                        PRINT(BLUE << "=> SERVER  : " << message << RESET);
                     int send_status = send(it->fd, message.c_str(), message.length(), 0);
                     if (send_status == -1)
                     {

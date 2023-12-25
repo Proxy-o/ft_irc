@@ -39,7 +39,7 @@ public:
     void setIsPrivate(bool status);
     void setIsSecret(bool status);
     void setIsInviteOnly(bool status);
-    void setTopicSetter(std::string setter);
+    void setTopicSetter(Client &client);
     void setTopicDate();
 
     // ************GETTERS************
