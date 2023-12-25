@@ -26,19 +26,26 @@ void kick(std::string &message, Client &client, Server &server)
     // see TARMAGX
     if (tokens[2].find(",") != std::string::npos)
         return;
-    
+
     std::string nick_to_kick = tokens[2];
     Client &client_to_kick = server.getClientByNickname(nick_to_kick);
-    if (client_to_kick == server.getClient(-1))
+    if (!channel.clientExist(client_to_kick))
     {
-        // TODO 
+        client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nick_to_kick, channel.getName()));
         return;
     }
 
-
-
-
-
-
-
+    std::string reason = "";
+    if (tokens.size() > 3)
+    {
+        if (tokens[3].find(":") == 0)
+        {
+            reason = message.substr(message.find(":")+1);
+        }
+        else
+        {
+            reason = tokens[3];
+        }
+    }
+    channel.sendMessageToAll(RPL_KICK(server.getHostname(), channel.getName(), client.getNickname(), client_to_kick.getNickname(), reason));
 }
