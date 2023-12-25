@@ -6,7 +6,7 @@
 #define RPL_YOURHOST(hostname, client) (":" + hostname + " 002 " + client + " :Your host is CRI, running version 1.0\r\n")
 #define RPL_CREATED(hostname, client, date) (":" + hostname + " 003 " + client + " :This server was created " + date + "\r\n")
 #define RPL_MYINFO(hostname, client) (":" + hostname + " 004 " + client + " " + "CRI 1.0 io toks k\r\n")
-#define RPL_ISUPPORT(hostname, client) (":" + hostname + " 005 " + client + " " + "NICKLEN=9\r\n")
+#define RPL_ISUPPORT(hostname, client) (":" + hostname + " 005 " + client + " " + "NICKLEN=9 TARGMAX=PRIVMSG:1,KICK:1 TOPICLEN=307\r\n")
 
 // OPER
 #define RPL_YOUREOPER(hostname, client) (":" + hostname + " 381 " + client + " :You are now an IRC operator\r\n")
@@ -42,3 +42,4 @@
 #define RPL_TOPIC(hostname, client, channel_name, topic) (":" + hostname + " 332 " + client + " " + channel_name + " :" + topic + "\r\n")
 #define RPL_TOPICWHOTIME(hostname, client, channel_name, topic_setter, topic_date) (":" + hostname + " 333 " + client + " " + channel_name + " " + topic_setter + " " + topic_date + "\r\n")
 #define ERR_NOTONCHANNEL(hostname, client, channel_name) (":" + hostname + " 442 " + client + " " + channel_name + " :You're not on that channel\r\n")
+#define ERR_USERNOTINCHANNEL(hostname, client, nickname, channel_name) (":" + hostname + " 441 " + client + " " + nickname + " " + channel_name + " :They aren't on that channel\r\n")

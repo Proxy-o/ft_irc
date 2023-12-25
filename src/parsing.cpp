@@ -25,8 +25,8 @@ int Server::parseMessage(int fd)
             formatMessage(line);
             if (client.isRegistered() == false && isValidCommand(line) == true)
                 registerClient(line, client);
-            // else if (client.isRegistered() && isValidCommand(line) == true)
-            // {
+            else if (client.isRegistered() && isValidCommand(line) == true)
+            {
                 if (line.find("NICK") == 0)
                 {
                     nick(line, client, *this);
@@ -60,11 +60,11 @@ int Server::parseMessage(int fd)
                     topic(line, client, *this);
                 }
             
-            //  }
-            //     else
-            //     {
-            //         client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
-            //     }
+             }
+                else
+                {
+                    client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
+                }
             client.resetRecvBuffer();
         }
     }

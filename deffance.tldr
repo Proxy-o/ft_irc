@@ -1,0 +1,296 @@
+{
+  "tldrawFileFormatVersion": 1,
+  "schema": {
+    "schemaVersion": 1,
+    "storeVersion": 4,
+    "recordVersions": {
+      "asset": {
+        "version": 1,
+        "subTypeKey": "type",
+        "subTypeVersions": {
+          "image": 2,
+          "video": 2,
+          "bookmark": 0
+        }
+      },
+      "camera": {
+        "version": 1
+      },
+      "document": {
+        "version": 2
+      },
+      "instance": {
+        "version": 22
+      },
+      "instance_page_state": {
+        "version": 5
+      },
+      "page": {
+        "version": 1
+      },
+      "shape": {
+        "version": 3,
+        "subTypeKey": "type",
+        "subTypeVersions": {
+          "group": 0,
+          "text": 1,
+          "bookmark": 1,
+          "draw": 1,
+          "geo": 7,
+          "note": 4,
+          "line": 1,
+          "frame": 0,
+          "arrow": 2,
+          "highlight": 0,
+          "embed": 4,
+          "image": 2,
+          "video": 1
+        }
+      },
+      "instance_presence": {
+        "version": 5
+      },
+      "pointer": {
+        "version": 1
+      }
+    }
+  },
+  "records": [
+    {
+      "gridSize": 10,
+      "name": "",
+      "meta": {},
+      "id": "document:document",
+      "typeName": "document"
+    },
+    {
+      "id": "pointer:pointer",
+      "typeName": "pointer",
+      "x": 1100.5211119959965,
+      "y": 393.3229199102877,
+      "lastActivityTimestamp": 1703501912456,
+      "meta": {}
+    },
+    {
+      "meta": {},
+      "id": "page:page",
+      "name": "Page 1",
+      "index": "a1",
+      "typeName": "page"
+    },
+    {
+      "x": 42.16431323201277,
+      "y": 30.920046032292632,
+      "z": 0.9657828070046421,
+      "meta": {},
+      "id": "camera:page:page",
+      "typeName": "camera"
+    },
+    {
+      "editingShapeId": null,
+      "croppingShapeId": null,
+      "selectedShapeIds": [],
+      "hoveredShapeId": null,
+      "erasingShapeIds": [],
+      "hintingShapeIds": [],
+      "focusedGroupId": null,
+      "meta": {},
+      "id": "instance_page_state:page:page",
+      "pageId": "page:page",
+      "typeName": "instance_page_state"
+    },
+    {
+      "followingUserId": null,
+      "opacityForNextShape": 0.75,
+      "stylesForNextShape": {
+        "tldraw:color": "black",
+        "tldraw:size": "s",
+        "tldraw:font": "mono",
+        "tldraw:fill": "none",
+        "tldraw:arrowheadStart": "none",
+        "tldraw:arrowheadEnd": "arrow",
+        "tldraw:geo": "rectangle"
+      },
+      "brush": null,
+      "scribbles": [],
+      "cursor": {
+        "type": "default",
+        "rotation": 0
+      },
+      "isFocusMode": false,
+      "exportBackground": true,
+      "isDebugMode": false,
+      "isToolLocked": false,
+      "screenBounds": {
+        "x": 0,
+        "y": 0,
+        "w": 1441,
+        "h": 766
+      },
+      "zoomBrush": null,
+      "isGridMode": false,
+      "isPenMode": false,
+      "chatMessage": "",
+      "isChatting": false,
+      "highlightedUserIds": [],
+      "canMoveCamera": true,
+      "isFocused": true,
+      "devicePixelRatio": 2,
+      "isCoarsePointer": false,
+      "isHoveringCanvas": true,
+      "openMenus": [],
+      "isChangingStyle": false,
+      "isReadonly": false,
+      "meta": {},
+      "id": "instance:instance",
+      "currentPageId": "page:page",
+      "typeName": "instance"
+    },
+    {
+      "x": 296.08984375,
+      "y": 109.90625,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:7FjdN5l6T6_B39HjHa3oo",
+      "type": "text",
+      "props": {
+        "color": "red",
+        "size": "m",
+        "w": 591.40625,
+        "text": "+ SERVER NOT SUPORTING kick #cha1 us1,us2",
+        "font": "mono",
+        "align": "middle",
+        "autoSize": true,
+        "scale": 1
+      },
+      "parentId": "page:page",
+      "index": "a1",
+      "typeName": "shape"
+    },
+    {
+      "x": 381.6171875,
+      "y": 154.0770305467688,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 1,
+      "meta": {},
+      "id": "shape:gW-pryUV4YcVfbSc2czG4",
+      "type": "text",
+      "props": {
+        "color": "grey",
+        "size": "xl",
+        "w": 920,
+        "text": "Servers MAY limit the number of target users per KICK command via the TARGMAX parameter of RPL_ISUPPORT, and silently drop targets if the number of targets exceeds the limit.",
+        "font": "mono",
+        "align": "start",
+        "autoSize": false,
+        "scale": 0.5359757133152174
+      },
+      "parentId": "page:page",
+      "index": "a2",
+      "typeName": "shape"
+    },
+    {
+      "x": 911.4715636972123,
+      "y": 60.8413461666384,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 0.5,
+      "meta": {},
+      "id": "shape:BxaTWT9UMtK9EruP4eHMr",
+      "type": "bookmark",
+      "props": {
+        "url": "https://modern.ircdocs.horse/#kick-message",
+        "w": 300,
+        "h": 320,
+        "assetId": "asset:142187352"
+      },
+      "parentId": "page:page",
+      "index": "a3",
+      "typeName": "shape"
+    },
+    {
+      "x": 823.5032767647322,
+      "y": 350.27271427818414,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 0.75,
+      "meta": {},
+      "id": "shape:bbAgWD9CrhakV3yVsB3hh",
+      "type": "arrow",
+      "parentId": "page:page",
+      "index": "a4",
+      "props": {
+        "dash": "draw",
+        "size": "s",
+        "fill": "semi",
+        "color": "black",
+        "labelColor": "black",
+        "bend": 0,
+        "start": {
+          "type": "point",
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "type": "binding",
+          "boundShapeId": "shape:BxaTWT9UMtK9EruP4eHMr",
+          "normalizedAnchor": {
+            "x": 0.10556103452085419,
+            "y": 0.584137026658025
+          },
+          "isPrecise": true,
+          "isExact": false
+        },
+        "arrowheadStart": "none",
+        "arrowheadEnd": "arrow",
+        "text": "",
+        "font": "mono"
+      },
+      "typeName": "shape"
+    },
+    {
+      "x": 209.15788311438936,
+      "y": 23.779752531988535,
+      "rotation": 0,
+      "isLocked": false,
+      "opacity": 0.75,
+      "meta": {},
+      "id": "shape:bNzoXHj-zSMNwCIEf18Hh",
+      "type": "geo",
+      "props": {
+        "w": 1054.605159527451,
+        "h": 453.69203673129164,
+        "geo": "rectangle",
+        "color": "black",
+        "labelColor": "black",
+        "fill": "none",
+        "dash": "draw",
+        "size": "s",
+        "font": "mono",
+        "text": "",
+        "align": "middle",
+        "verticalAlign": "middle",
+        "growY": 0,
+        "url": ""
+      },
+      "parentId": "page:page",
+      "index": "a5",
+      "typeName": "shape"
+    },
+    {
+      "id": "asset:142187352",
+      "typeName": "asset",
+      "type": "bookmark",
+      "props": {
+        "src": "https://modern.ircdocs.horse/#kick-message",
+        "image": "",
+        "title": "https://modern.ircdocs.horse/...",
+        "description": ""
+      },
+      "meta": {}
+    }
+  ]
+}
