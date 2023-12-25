@@ -12,13 +12,7 @@ void privmsg(std::string &message, Client &client, Server &server)
     std::string msg;    
     if (tokens[2].find(":") == 0)
     {
-        // join the rest of the tokens
-        for (size_t i = 2; i < tokens.size(); i++)
-        {
-            msg += tokens[i];
-            if (i != tokens.size() - 1)
-                msg += " ";
-        }
+        msg = message.substr(message.find(":") );
     }
     else
     {
