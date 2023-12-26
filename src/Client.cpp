@@ -14,6 +14,7 @@ Client::Client(int sockfd)
     this->_is_welcomed = false;
     this->_nickname = "";
     this->_hostname = getClientHostname();
+    this->_need_to_quit = false;
 }
 
 Client::~Client()
@@ -169,4 +170,15 @@ std::string Client::getClientHostname() {
 std::string Client::getHostname()
 {
     return this->_hostname;
+}
+
+
+void Client::setNeedToQuit(bool status)
+{
+    this->_need_to_quit = status;
+}
+
+bool Client::needToQuit()
+{
+    return this->_need_to_quit;
 }

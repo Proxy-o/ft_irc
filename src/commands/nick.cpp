@@ -37,6 +37,6 @@ void nick(std::string &message, Client &client, Server &server)
         client.setSendBuffer(ERR_NICKNAMEINUSE(server.getHostname(), old_nickname, nickname));
         return;
     }
-    client.setSendBuffer(RPL_NICK(server.getHostname(), client.getNickname(), client.getUsername(), nickname));
+    client.setSendBuffer(RPL_NICK(client.getHostname(), client.getNickname(), client.getUsername(), nickname));
     client.setNickname(nickname);
 }

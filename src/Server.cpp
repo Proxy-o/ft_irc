@@ -37,15 +37,13 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
     char buffer[513];
     bzero(buffer, sizeof(buffer));
     int recv_status = recv(it->fd, buffer, sizeof(buffer) - 1, 0);
-    if (recv_status <= 0)
+    Client &client = this->getClient(it->fd);
+    if (recv_status <= 0 || client.needToQuit())
     {
-        if (recv_status == -1)
-            PRINT_ERR(RED << "recv Error" << RESET);
         removeClient(poll_fds, it);
         return FAIL;
     }
     std::string message(buffer);
-    Client &client = this->getClient(it->fd);
     if (message.find("\n") == std::string::npos && (client.getRecvBuffer().length() >= 512 || message.length() >= 512))
     {
         client.resetRecvBuffer();
