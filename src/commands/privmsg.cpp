@@ -30,5 +30,5 @@ void privmsg(std::string &message, Client &client, Server &server)
         channel.sendMessageToAllExcept(PRIVMSG(server.getHostname(), client.getNickname(), client.getUsername(), channel.getName(), msg), client);
         return;
     }
-    client.setReplay(401, server);
+    client.setSendBuffer(ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), targetName));
 }
