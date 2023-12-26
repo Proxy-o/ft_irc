@@ -18,8 +18,7 @@ private:
     std::string _topic_date;
     std::string _name;
     std::string _password;
-    bool _isPrivate;
-    bool _isSecret;
+    bool _isTopicSet;
     bool _isInviteOnly;
 
 
@@ -41,6 +40,7 @@ public:
     void setIsInviteOnly(bool status);
     void setTopicSetter(Client &client);
     void setTopicDate();
+    void setModes(std::string modes);
 
     // ************GETTERS************
     std::string getTopic();
@@ -65,4 +65,5 @@ public:
     void sendMessageToAllExcept(std::string message, Client &client);
     void setReplay(int replay, Server &server, Client &client);
     bool clientExist(Client &client);
+    void removeOp(Client &client);
 };

@@ -64,12 +64,16 @@ int Server::parseMessage(int fd)
                 {
                     kick(line, client, *this);
                 }
-             }
+                else if (line.find("MODE") == 0)
+                {
+                    mode(line, client, *this);
+                }
                 else
                 {
                     client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
                 }
             client.resetRecvBuffer();
+            }
         }
     }
     return SUCCESS;

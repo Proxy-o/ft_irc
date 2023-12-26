@@ -36,6 +36,7 @@
 #define RPL_NAMREPLY(hostname, client, channel_name) (":" + hostname + " 353 " + client + " = " + channel_name + " :")
 #define RPL_ENDOFNAMES(hostname, client, channel_name) (":" + hostname + " 366 " + client + " " + channel_name + " :End of NAMES list\r\n")
 #define ERR_USERONCHANNEL(hostname, clientname, clientnick, channel_name) (":" + hostname + " " + clientname + " " + clientnick + " " + channel_name + " :is already on channel\r\n")
+#define ERR_BADCHANNELKEY(hostname, client, channel_name) (":" + hostname + client + " " + channel_name + " :Cannot join channel (+k)\r\n")
 
 // TOPIC
 #define RPL_NOTOPIC(hostname, client, channel_name) (":" + hostname + " 331 " + client + " " + channel_name + " :No topic is set\r\n")
@@ -46,3 +47,8 @@
 #define ERR_NOTONCHANNEL(hostname, client, channel_name) (":" + hostname + " 442 " + client + " " + channel_name + " :You're not on that channel\r\n")
 #define ERR_USERNOTINCHANNEL(hostname, client, nickname, channel_name) (":" + hostname + " 441 " + client + " " + nickname + " " + channel_name + " :They aren't on that channel\r\n")
 #define RPL_KICK(hostname, channel_name, kicker, to_kick, reason) (":" + kicker + "@" + hostname + " KICK " + channel_name + " " + to_kick + " " + reason + "\r\n")
+#define ERR_CHANOPRIVSNEEDED(hostname, client, channel_name) (":" + hostname + " 482 " + client + " " + channel_name + " :You're not channel operator\r\n")
+
+// MODE
+#define RPL_CHANNELMODEIS(hostname, client, channel_name, modes) (":" + hostname + " 324 " + client + " " + channel_name + " " + modes + "\r\n")
+#define ERR_UNKNOWNMODE(hostname, client, mode) (":" + hostname + " 472 " + client + " " + mode + " :is unknown mode char to me\r\n")

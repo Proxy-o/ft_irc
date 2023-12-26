@@ -2,17 +2,17 @@
 
 Channel::Channel()
 {
-    this->_isPrivate = false;
-    this->_isSecret = false;
     this->_isInviteOnly = false;
+    this->_isTopicSet = true;
+    this->_topic = "";
 }
 
 Channel::Channel(Client *op, int op_fd)
 {
     this->_chan_ops.insert(std::pair<int, Client &>(op_fd, *op));
-    this->_isPrivate = false;
-    this->_isSecret = false;
     this->_isInviteOnly = false;
+    this->_isTopicSet = true;
+    this->_topic = "";
 }
 
 Channel::~Channel()
@@ -26,8 +26,6 @@ Channel &Channel::operator=(const Channel &channel)
     this->_topic = channel._topic;
     this->_name = channel._name;
     this->_password = channel._password;
-    this->_isPrivate = channel._isPrivate;
-    this->_isSecret = channel._isSecret;
     this->_isInviteOnly = channel._isInviteOnly;
     return (*this);
 }
@@ -62,16 +60,6 @@ void Channel::setPassword(std::string password)
     this->_password = password;
 }
 
-void Channel::setIsPrivate(bool status)
-{
-    this->_isPrivate = status;
-}
-
-void Channel::setIsSecret(bool status)
-{
-    this->_isSecret = status;
-}
-
 void Channel::setIsInviteOnly(bool status)
 {
     this->_isInviteOnly = status;
@@ -97,24 +85,14 @@ std::string Channel::getPassword()
 
 std::string Channel::getModes()
 {
-    std::string modes = "nt";
-    if (this->_isPrivate)
-        modes += "p";
-    if (this->_isSecret)
-        modes += "s";
+    std::string modes = "+";
     if (this->_isInviteOnly)
         modes += "i";
+    if (this->_isTopicSet)
+        modes += "t";
+    if (this->_password != "")
+        modes += "k " + this->_password;
     return (modes);
-}
-
-bool Channel::isPrivate()
-{
-    return (this->_isPrivate);
-}
-
-bool Channel::isSecret()
-{
-    return (this->_isSecret);
 }
 
 bool Channel::isInviteOnly()
@@ -216,3 +194,22 @@ std::string Channel::getTopicDate()
 {
     return (this->_topic_date);
 }
+
+void Channel::removeOp(Client &client)
+{
+    this->_chan_ops.erase(client.getClientSockfd());
+}
+
+void Channel::setModes(std::string modes)
+{
+    if (modes.find("t") != std::string::npos)
+        this->_isTopicSet = true;
+    if (modes.find("i") != std::string::npos)
+        this->_isInviteOnly = true;
+    if (modes.find("k") != std::string::npos)
+    {
+        this->_password = modes.substr(modes.find("k") + 1);
+    }
+
+}
+ 

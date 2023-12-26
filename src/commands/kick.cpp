@@ -17,6 +17,12 @@ void kick(std::string &message, Client &client, Server &server)
         client.setSendBuffer(ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(), channel_name));
         return;
     }
+    // not op
+    if (channel.isOp(client) != "@")
+    {
+        client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
+        return;
+    }
     // not in the channel
     if (!channel.clientExist(client))
     {
