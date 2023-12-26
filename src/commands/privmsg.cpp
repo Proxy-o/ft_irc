@@ -27,6 +27,11 @@ void privmsg(std::string &message, Client &client, Server &server)
     Channel &channel = server.getChannelByName(targetName);
     if (channel != server.getChannel(""))
     {
+        if (!channel.clientExist(client))
+        {
+            client.setReplay(404, server);
+            return;
+        }
         channel.sendMessageToAllExcept(PRIVMSG(server.getHostname(), client.getNickname(), client.getUsername(), channel.getName(), msg), client);
         return;
     }
