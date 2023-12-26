@@ -27,6 +27,8 @@
 // PRIVMSG
 #define ERR_NOSUCHNICK(hostname, client, nickname) (":" + hostname + " 401 " + client + " " + nickname + " :No such nick/channel\r\n")
 #define PRIVMSG(hostname, client, username, target, message) (":" + client + "!~" + username + "@" + hostname + " PRIVMSG " + target + " " + message + "\r\n")
+// ERROR 404
+#define ERR_CANNOTSENDTOCHAN(hostname, client, channel_name) (":" + hostname + " 404 " + client + " " + channel_name + " :Cannot send to channel\r\n")
 
 // CHANNEL
 #define ERR_NOSUCHCHANNEL(hostname, client, channel_name) (":" + hostname + " 403 " + client + " " + channel_name + " :No such channel\r\n")

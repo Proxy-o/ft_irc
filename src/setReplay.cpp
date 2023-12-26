@@ -28,6 +28,9 @@ void Client::setReplay(int replay, Server &server)
     case 401:
         message = ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), client.getNickname());
         break;
+    case 404:
+        message = ERR_CANNOTSENDTOCHAN(server.getHostname(), client.getNickname(), client.getNickname());
+        break;
     case 431:
         message = ERR_NONICKNAMEGIVEN(server.getHostname(), client.getNickname());
         break;
@@ -48,7 +51,7 @@ void Client::setReplay(int replay, Server &server)
 }
 void Channel::setReplay(int replay, Server &server, Client &client)
 {
-    std::string message;
+    std::string message = "";
     switch (replay)
     {
     case 403:
@@ -59,22 +62,6 @@ void Channel::setReplay(int replay, Server &server, Client &client)
         break;
     case 102:
         message = ERR_USERONCHANNEL(server.getHostname(), client.getUsername(), client.getNickname(), this->getName());
-        break;
-    case 103:
-        {
-            std::map<int, Client &>::iterator it = this->getClients().begin();
-            for (; it != this->getClients().end(); it++)
-            {
-                if (it->second == client)
-                    continue;
-                message += this->isOp(it->second);
-                message += it->second.getNickname() + " ";
-            }
-            message += "\r\n";
-            break;
-        }
-    case 353:
-        message = RPL_NAMREPLY(server.getHostname(), client.getNickname(), this->getName());
         break;
     case 366:
         message = RPL_ENDOFNAMES(server.getHostname(), client.getNickname(), this->getName());
