@@ -21,7 +21,7 @@ void privmsg(std::string &message, Client &client, Server &server)
     Client &target = server.getClientByNickname(targetName);
     if (target != server.getClient(-1))
     {
-        target.setSendBuffer(PRIVMSG(server.getHostname(), client.getNickname(), client.getUsername(), target.getNickname(), msg));
+        target.setSendBuffer(PRIVMSG(client.getHostname(), client.getNickname(), client.getUsername(), target.getNickname(), msg));
         return;
     }
     Channel &channel = server.getChannelByName(targetName);
