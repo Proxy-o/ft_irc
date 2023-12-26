@@ -3,9 +3,7 @@
 
 static bool isValidCommand(std::string line)
 {
-    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 
-    || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0 || line.find("PING") == 0 || line.find("PONG") == 0 
-    || line.find("TOPIC") == 0 || line.find("KICK") == 0 || line.find("MODE") == 0)
+    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0 || line.find("PING") == 0 || line.find("PONG") == 0 || line.find("TOPIC") == 0 || line.find("KICK") == 0 || line.find("MODE") == 0 || line.find("PART") == 0 || line.find("QUIT") == 0)
         return true;
     return false;
 }
@@ -68,13 +66,22 @@ int Server::parseMessage(int fd)
                 {
                     mode(line, client, *this);
                 }
-                else
+                else if (line.find("PART") == 0)
                 {
-                    client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
+                    part(line, client, *this);
                 }
-            client.resetRecvBuffer();
+                else if (line.find("QUIT") == 0)
+                {
+                    quit(line, client);
+                }
             }
+            else
+            {
+                client.setSendBuffer("INVALID COMMAND: " + line + "\r\n");
+            }
+            client.resetRecvBuffer();
         }
     }
+
     return SUCCESS;
 }

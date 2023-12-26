@@ -1,5 +1,18 @@
 #include "Channel.hpp"
 
+void sendNames(Channel &channel, Client &client, Server &server)
+{
+    std::string rpl = RPL_NAMREPLY(server.getHostname(), client.getNickname(), channel.getName());
+    std::map<int, Client &>::iterator clients = channel.getClients().begin();
+    for (; clients != channel.getClients().end(); clients++)
+    {
+        rpl += channel.isOp(clients->second);
+        rpl += clients->second.getNickname() + " ";
+    }
+    rpl += "\r\n";
+    client.setSendBuffer(rpl);
+}
+
 void join(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> keys;
@@ -38,8 +51,6 @@ void join(std::string &message, Client &client, Server &server)
             new_channel.setName(channels[i]);
             server.getChannels().push_back(new_channel);
             it = server.getChannels().end() - 1;
-            it->addClient(client);
-            it->addop(client);
         }
         else
         {
@@ -59,17 +70,16 @@ void join(std::string &message, Client &client, Server &server)
             it->addClient(client);
         }
         std::string realname = (client.getRealname().find_last_of(" ") != std::string::npos) ? ":" + client.getRealname() : client.getRealname();
-        it->sendMessageToAll(RPL_JOIN(client.getUsername(), it->isOp(client), client.getNickname(), client.getHostname(), it->getName()));
+        it->sendMessageToAll(RPL_JOIN(client.getNickname(), it->isOp(client), client.getUsername(), client.getHostname(), it->getName()));
+        it->sendMessageToAll(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n");
         if (it->getTopic() != "")
         {
             it->setReplay(332, server, client);
             it->setReplay(333, server, client);
         }
-        it->setReplay(101, server, client);
-        it->setReplay(353, server, client);
-        it->setReplay(103, server, client);
+        sendNames(*it, client, server);
         it->setReplay(366, server, client);
-        it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
+        // it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
         channel_index++;
     }
 }

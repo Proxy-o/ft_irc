@@ -27,11 +27,12 @@
 // PRIVMSG
 #define ERR_NOSUCHNICK(hostname, client, nickname) (":" + hostname + " 401 " + client + " " + nickname + " :No such nick/channel\r\n")
 #define PRIVMSG(hostname, client, username, target, message) (":" + client + "!~" + username + "@" + hostname + " PRIVMSG " + target + " " + message + "\r\n")
-
+// ERROR 404
+#define ERR_CANNOTSENDTOCHAN(hostname, client, channel_name) (":" + hostname + " 404 " + client + " " + channel_name + " :Cannot send to channel\r\n")
 
 // CHANNEL
 #define ERR_NOSUCHCHANNEL(hostname, client, channel_name) (":" + hostname + " 403 " + client + " " + channel_name + " :No such channel\r\n")
-#define RPL_JOIN(clientname, isop, clientnick, hostname, channel_name) (":" + clientname + "!~" + isop + clientnick + "@" +hostname + " JOIN :" + channel_name + "\r\n")
+#define RPL_JOIN(clientname, isop, clientnick, hostname, channel_name) (":" + clientname + "!~" + isop + clientnick + "@" + hostname + " JOIN :" + channel_name + "\r\n")
 #define RPL_MODE(hostname, channel_name, modes) (":" + hostname + " MODE " + channel_name + " " + modes + "\r\n")
 #define RPL_NAMREPLY(hostname, client, channel_name) (":" + hostname + " 353 " + client + " = " + channel_name + " :")
 #define RPL_ENDOFNAMES(hostname, client, channel_name) (":" + hostname + " 366 " + client + " " + channel_name + " :End of NAMES list\r\n")
@@ -52,3 +53,6 @@
 // MODE
 #define RPL_CHANNELMODEIS(hostname, client, channel_name, modes) (":" + hostname + " 324 " + client + " " + channel_name + " " + modes + "\r\n")
 #define ERR_UNKNOWNMODE(hostname, client, mode) (":" + hostname + " 472 " + client + " " + mode + " :is unknown mode char to me\r\n")
+
+// PART
+#define RPL_PART(hostname, channel_name, client, username, reason) (":" + client + "!" + username + "@" + hostname + "  PART " + channel_name + " :" + reason + "\r\n")

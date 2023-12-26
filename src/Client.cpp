@@ -4,7 +4,6 @@ Client::Client()
 {
 }
 
-
 Client::Client(int sockfd)
 {
     this->_client_sockfd = sockfd;
@@ -12,8 +11,9 @@ Client::Client(int sockfd)
     this->_send_buffer = "";
     this->_is_registered = false;
     this->_is_welcomed = false;
-    this->_nickname = "";
+    this->_nickname = "*";
     this->_hostname = getClientHostname();
+    this->_need_to_quit = false;
 }
 
 Client::~Client()
@@ -151,22 +151,43 @@ int Client::getClientSockfd()
     return this->_client_sockfd;
 }
 
-std::string Client::getClientHostname() {
+std::string Client::getClientHostname()
+{
     char hostname[NI_MAXHOST];
     struct sockaddr_storage addr;
     socklen_t len = sizeof(addr);
 
-    getpeername(this->_client_sockfd, (struct sockaddr*)&addr, &len);
-    int result = getnameinfo((struct sockaddr*)&addr, sizeof(struct sockaddr_storage),
+    getpeername(this->_client_sockfd, (struct sockaddr *)&addr, &len);
+    int result = getnameinfo((struct sockaddr *)&addr, sizeof(struct sockaddr_storage),
                              hostname, NI_MAXHOST, nullptr, 0, 0);
-    if (result != 0) {
-        return gai_strerror(result);    
+    if (result != 0)
+    {
+        return gai_strerror(result);
     }
-
-    return std::string(hostname);
+    std::string hostname_str = std::string(hostname);
+    if (hostname_str == "localhost" || hostname_str == "127.0.0.1")
+    {
+        if (gethostname(hostname, sizeof(hostname)) == -1)
+        {
+            throw std::runtime_error("gethostname Error: can't get hostname");
+        }
+        hostname_str = std::string(hostname);
+    }
+PRINT("hostname_str: " << hostname_str)
+    return hostname_str;
 }
 
 std::string Client::getHostname()
 {
     return this->_hostname;
+}
+
+void Client::setNeedToQuit(bool status)
+{
+    this->_need_to_quit = status;
+}
+
+bool Client::needToQuit()
+{
+    return this->_need_to_quit;
 }

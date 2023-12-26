@@ -19,6 +19,7 @@ private:
     bool _pass_is_correct;
     bool _is_welcomed;
     bool is_operator;
+    bool _need_to_quit;
 
 public:
     Client();
@@ -39,6 +40,7 @@ public:
     void setIsPassCorrect(bool status);
     void setIsWelcomed(bool status);
     void setIsOperator(bool status);
+    void setNeedToQuit(bool status);
 
     // ************GETTERS************
     std::string getRecvBuffer();
@@ -52,12 +54,14 @@ public:
     bool isWelcomed();
     bool isOperator();
     int getClientSockfd();
+    bool needToQuit();
 
     // ************METHODS************
     void resetRecvBuffer();
     void resetSendBuffer();
     void setReplay(int replay, Server &server);
     std::string getClientHostname();
+    
 
 
 };
