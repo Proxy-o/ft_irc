@@ -10,6 +10,7 @@ Channel::Channel()
 Channel::Channel(Client *op, int op_fd)
 {
     this->_chan_ops.insert(std::pair<int, Client &>(op_fd, *op));
+    this->_clients.insert(std::pair<int, Client &>(op_fd, *op));
     this->_isPrivate = false;
     this->_isSecret = false;
     this->_isInviteOnly = false;
