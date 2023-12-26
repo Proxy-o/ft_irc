@@ -12,7 +12,7 @@ Client::Client(int sockfd)
     this->_send_buffer = "";
     this->_is_registered = false;
     this->_is_welcomed = false;
-    this->_nickname = "";
+    this->_nickname = "*";
     this->_hostname = getClientHostname();
     this->_need_to_quit = false;
 }

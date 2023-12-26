@@ -3,7 +3,7 @@
 
 static bool isValidData(Client &client)
 {
-    if (client.getNickname() == "" || client.getUsername() == "" || client.getRealname() == "")
+    if (client.getNickname() == "" || client.getNickname() == "*" || client.getUsername() == "" || client.getRealname() == "")
         return false;
     return true;
 }

@@ -32,11 +32,16 @@ void nick(std::string &message, Client &client, Server &server)
     Client &old_client = server.getClientByNickname(nickname);
     if (old_client != server.getClient(-1) && old_client != client)
     {
-        std::string old_nickname = old_client.getNickname();
+        std::string old_nickname = client.getNickname();
         old_nickname == "" ? old_nickname = "*" : old_nickname;
         client.setSendBuffer(ERR_NICKNAMEINUSE(server.getHostname(), old_nickname, nickname));
         return;
     }
-    client.setSendBuffer(RPL_NICK(client.getHostname(), client.getNickname(), client.getUsername(), nickname));
+    std::string nick_to_send;
+    if (client.getNickname() == "*" || client.getNickname() == "")
+        nick_to_send = nickname;
+    else
+        nick_to_send = client.getNickname();
+    client.setSendBuffer(RPL_NICK(client.getHostname(), nick_to_send, client.getUsername(), nickname));
     client.setNickname(nickname);
 }

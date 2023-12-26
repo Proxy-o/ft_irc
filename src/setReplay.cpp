@@ -8,19 +8,19 @@ void Client::setReplay(int replay, Server &server)
     switch (replay)
     {
     case 001:
-        message = RPL_WELCOME(server.getHostname(), client.getNickname());
+        message = RPL_WELCOME(client.getHostname(), client.getNickname());
         break;
     case 002:
-        message = RPL_YOURHOST(server.getHostname(), client.getNickname());
+        message = RPL_YOURHOST(client.getHostname(), client.getNickname());
         break;
     case 003:
-        message = RPL_CREATED(server.getHostname(), client.getNickname(), server.getCreationDate());
+        message = RPL_CREATED(client.getHostname(), client.getNickname(), server.getCreationDate());
         break;
     case 004:
-        message = RPL_MYINFO(server.getHostname(), client.getNickname());
+        message = RPL_MYINFO(client.getHostname(), client.getNickname());
         break;
     case 005:
-        message = RPL_ISUPPORT(server.getHostname(), client.getNickname());
+        message = RPL_ISUPPORT(client.getHostname(), client.getNickname());
         break;
     case 381:
         message = RPL_YOUREOPER(server.getHostname(), client.getNickname());
