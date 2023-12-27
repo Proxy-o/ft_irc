@@ -19,8 +19,14 @@ void privmsg(std::string &message, Client &client, Server &server)
         msg = tokens[2];
     }
     Client &target = server.getClientByNickname(targetName);
+    
     if (target != server.getClient(-1))
     {
+        if (target.isRegistered() == false)
+        {
+            client.setSendBuffer(ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), targetName));
+            return;
+        }
         target.setSendBuffer(PRIVMSG(client.getHostname(), client.getNickname(), client.getUsername(), target.getNickname(), msg));
         return;
     }

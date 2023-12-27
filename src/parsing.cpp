@@ -12,7 +12,6 @@ int Server::parseMessage(int fd)
 {
     Client &client = this->getClient(fd);
     std::string message = client.getRecvBuffer();
-    // PRINT("message: " + message);
     if (message.find("\n") != std::string::npos)
     {
 
@@ -74,10 +73,6 @@ int Server::parseMessage(int fd)
                 {
                     quit(line, client);
                 }
-            }
-            else
-            {
-                client.setSendBuffer("INVALID COMMAND: " + line + "\r\n");
             }
             client.resetRecvBuffer();
         }
