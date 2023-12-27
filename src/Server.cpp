@@ -190,8 +190,7 @@ Channel &Server::getChannelByName(std::string name)
 {
     if (name == "")
         return *(this->_channels.end());
-    if (name[0] != '#')
-        name = "#" + name;
+
     std::vector<Channel>::iterator it = this->_channels.begin();
     for (; it != this->_channels.end(); it++)
     {
