@@ -17,16 +17,16 @@ void kick(std::string &message, Client &client, Server &server)
         client.setSendBuffer(ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(), channel_name));
         return;
     }
-    // not op
-    if (channel.isOp(client) != "@")
-    {
-        client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
-        return;
-    }
     // not in the channel
     if (!channel.clientExist(client))
     {
         client.setSendBuffer(ERR_NOTONCHANNEL(server.getHostname(), client.getNickname(), channel.getName()));
+        return;
+    }
+    // not op
+    if (channel.isOp(client) != "@")
+    {
+        client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
         return;
     }
     // see TARMAGX
@@ -41,7 +41,7 @@ void kick(std::string &message, Client &client, Server &server)
         return;
     }
 
-    std::string reason = "";
+    std::string reason = "no reason";
     if (tokens.size() > 3)
     {
         if (tokens[3].find(":") == 0)
