@@ -3,11 +3,11 @@
 void sendNames(Channel &channel, Client &client, Server &server)
 {
     std::string rpl = RPL_NAMREPLY(server.getHostname(), client.getNickname(), channel.getName());
-    std::map<int, Client &>::iterator clients = channel.getClients().begin();
+    std::map<int, Client *>::iterator clients = channel.getClients().begin();
     for (; clients != channel.getClients().end(); clients++)
     {
-        rpl += channel.isOp(clients->second);
-        rpl += clients->second.getNickname() + " ";
+        rpl += channel.isOp(*clients->second);
+        rpl += clients->second->getNickname() + " ";
     }
     rpl += "\r\n";
     client.setSendBuffer(rpl);

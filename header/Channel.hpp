@@ -11,8 +11,8 @@ class Server;
 class Channel
 {
 private:
-    std::map<int, Client &> _clients;
-    std::map<int, Client &> _chan_ops;
+    std::map<int, Client *> _clients;
+    std::map<int, Client *> _chan_ops;
     std::string _topic;
     std::string _topic_setter;
     std::string _topic_date;
@@ -51,8 +51,8 @@ public:
     bool isPrivate();
     bool isSecret();
     bool isInviteOnly();
-    std::map<int, Client &> &getClients();
-    std::map<int, Client &> &getChanOps();
+    std::map<int, Client *> &getClients();
+    std::map<int, Client *> &getChanOps();
     std::string getTopicSetter();
     std::string getTopicDate();
 

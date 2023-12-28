@@ -9,8 +9,8 @@ Channel::Channel()
 
 Channel::Channel(Client *op, int op_fd)
 {
-    this->_chan_ops.insert(std::pair<int, Client &>(op_fd, *op));
-    this->_clients.insert(std::pair<int, Client &>(op_fd, *op));
+    this->_chan_ops.insert(std::pair<int, Client *>(op_fd, op));
+    this->_clients.insert(std::pair<int, Client *>(op_fd, op));
     this->_isInviteOnly = false;
     this->_isTopicSet = true;
     this->_topic = "";
@@ -43,7 +43,7 @@ bool Channel::operator!=(const Channel &channel) const
 // ************SETTERS************
 void Channel::setOperator(Client *op, int op_fd)
 {
-    this->_chan_ops.insert(std::pair<int, Client &>(op_fd, *op));
+    this->_chan_ops.insert(std::pair<int, Client *>(op_fd, op));
 }
 
 void Channel::setTopic(std::string topic)
@@ -101,12 +101,12 @@ bool Channel::isInviteOnly()
     return (this->_isInviteOnly);
 }
 
-std::map<int, Client &> &Channel::getClients()
+std::map<int, Client *> &Channel::getClients()
 {
     return (this->_clients);
 }
 
-std::map<int, Client &> &Channel::getChanOps()
+std::map<int, Client *> &Channel::getChanOps()
 {
     return (this->_chan_ops);
 }
@@ -115,20 +115,20 @@ std::map<int, Client &> &Channel::getChanOps()
 
 void Channel::addClient(Client &client)
 {
-    this->_clients.insert(std::pair<int, Client &>(client.getClientSockfd(), client));
+    this->_clients.insert(std::pair<int, Client *>(client.getClientSockfd(), &client));
 }
 
 void Channel::addop(Client &client)
 {
-    this->_chan_ops.insert(std::pair<int, Client &>(client.getClientSockfd(), client));
+    this->_chan_ops.insert(std::pair<int, Client *>(client.getClientSockfd(), &client));
 }
 
 std::string Channel::isOp(Client &client)
 {
-    std::map<int, Client &>::iterator it = this->_chan_ops.begin();
+    std::map<int, Client *>::iterator it = this->_chan_ops.begin();
     for (; it != this->_chan_ops.end(); it++)
     {
-        if (it->second == client)
+        if (it->second->getNickname() == client.getNickname())
             return ("@");
     }
     return ("");
@@ -143,30 +143,30 @@ void Channel::removeClient(Client &client)
 
 void Channel::sendMessageToAll(std::string message)
 {
-    std::map<int, Client &>::iterator it = this->_clients.begin();
+    std::map<int, Client *>::iterator it = this->_clients.begin();
     for (; it != this->_clients.end(); it++)
     {
-        it->second.setSendBuffer(message);
+        it->second->setSendBuffer(message);
     }
 }
 
 void Channel::sendMessageToAllExcept(std::string message, Client &client)
 {
-    std::map<int, Client &>::iterator it = this->_clients.begin();
+    std::map<int, Client *>::iterator it = this->_clients.begin();
     for (; it != this->_clients.end(); it++)
     {
-        if (it->second == client)
+        if (it->second->getNickname() == client.getNickname())
             continue;
-        it->second.setSendBuffer(message);
+        it->second->setSendBuffer(message);
     }
 }
 
 bool Channel::clientExist(Client &client)
 {
-    std::map<int, Client &>::iterator it = this->_clients.begin();
+    std::map<int, Client *>::iterator it = this->_clients.begin();
     for (; it != this->_clients.end(); it++)
     {
-        if (it->second == client)
+        if (it->second->getNickname() == client.getNickname())
             return (true);
     }
     return (false);
