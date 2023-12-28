@@ -41,4 +41,6 @@ void part(std::string &message, Client &client, Server &server)
     }
     channel.sendMessageToAll(RPL_PART(client.getHostname(), channel.getName(), client.getNickname(),client.getUsername(), reason));
     channel.removeClient(client);
+    if (channel.getClients().size() == 0)
+        server.removeChannel(channel);
 }
