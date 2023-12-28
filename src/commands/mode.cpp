@@ -52,6 +52,11 @@ void mode(std::string &message, Client &client, Server &server)
         client.setSendBuffer(ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(), targetName));
         return;
     }
+    if (channel.isOp(client) != "@")
+    {
+        client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
+        return;
+    }
     if (channel != server.getChannel(""))
     {
         if (tokens.size() == 2)
