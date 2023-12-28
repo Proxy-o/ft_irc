@@ -182,8 +182,12 @@ void Channel::setTopicSetter(Client &setter)
 
 void Channel::setTopicDate()
 {
-    this->_topic_date = std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+    std::time_t currentTime = std::time(NULL);
+    // Convert the time to string using sprintf
+    char buffer[20];  // Adjust the size accordingly
+    std::sprintf(buffer, "%ld", static_cast<long>(currentTime));
 
+    this->_topic_date = buffer;
 }
 
 std::string Channel::getTopicSetter()
