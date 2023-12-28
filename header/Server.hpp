@@ -29,8 +29,10 @@
 
 #define OPER_NAME "admin"
 #define OPER_PASS "pass_admin"
+
 class Client;
 class Channel;
+
 class Server
 {
 private:
@@ -69,16 +71,8 @@ public:
     int registerClient(std::string line, Client &client);
     Client &getClientByNickname(std::string nickname);
     Channel &getChannelByName(std::string name);
+    void removeChannel(Channel &channel);
     // ************ STATIC FUNCTIONS ************
 };
-/**
- * @brief Adds a pollfd structure to the given vector.
- *
- * This function adds a pollfd structure to the provided vector of pollfd structures.
- * The pollfd structure represents a file descriptor and the events to be monitored for that descriptor.
- *
- * @param fds The vector of pollfd structures to which the new structure will be added.
- * @param events The events to be monitored for the file descriptor.
- * @param fd The file descriptor to be added to the vector.
- */
+
 void add_pollfd(std::vector<pollfd> &fds, short int events, int fd);

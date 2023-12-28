@@ -3,7 +3,7 @@
 void pass(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> tokens = ft_split(message, " ");
-    client.setNickname("");
+    client.setNickname("*");
     client.setUsername("");
     client.setRealname("");
     if (tokens.size() < 2)

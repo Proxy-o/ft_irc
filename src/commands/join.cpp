@@ -1,9 +1,23 @@
 #include "Channel.hpp"
 
+void sendNames(Channel &channel, Client &client, Server &server)
+{
+    std::string rpl = RPL_NAMREPLY(server.getHostname(), client.getNickname(), channel.getName());
+    std::map<int, Client *>::iterator clients = channel.getClients().begin();
+    for (; clients != channel.getClients().end(); clients++)
+    {
+        rpl += channel.isOp(*clients->second);
+        rpl += clients->second->getNickname() + " ";
+    }
+    rpl += "\r\n";
+    client.setSendBuffer(rpl);
+}
+
 void join(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> keys;
     std::vector<std::string> params = ft_split(message, " ");
+    size_t channel_index = 0;
     // PRINT("JOIN");
     if (params.size() < 2)
     {
@@ -19,7 +33,7 @@ void join(std::string &message, Client &client, Server &server)
             continue;
         if (channels[i][0] != '#') // &
         {
-            channels[i] = "#" + channels[i];
+            continue;
         }
         std::vector<Channel>::iterator it = server.getChannels().begin();
         bool channel_exist = false;
@@ -37,9 +51,6 @@ void join(std::string &message, Client &client, Server &server)
             new_channel.setName(channels[i]);
             server.getChannels().push_back(new_channel);
             it = server.getChannels().end() - 1;
-            it->addClient(client);
-            it->addop(client);
-
         }
         else
         {
@@ -48,35 +59,27 @@ void join(std::string &message, Client &client, Server &server)
                 it->setReplay(102, server, client);
                 continue;
             }
+            if (it->getModes().find("k") != std::string::npos)
+            {
+                if ((keys.size() > channel_index && keys[channel_index] != it->getPassword()) || keys.size() <= channel_index)
+                {
+                    client.setSendBuffer(ERR_BADCHANNELKEY(server.getHostname(), client.getNickname(), it->getName()));
+                    continue;
+                }
+            }
             it->addClient(client);
         }
         std::string realname = (client.getRealname().find_last_of(" ") != std::string::npos) ? ":" + client.getRealname() : client.getRealname();
-        it->sendMessageToAll(RPL_JOIN(client.getUsername(), it->isOp(client), client.getNickname(), client.getHostname(), it->getName(), client.getRealname()));
-        it->setReplay(101, server, client);
-        it->setReplay(353, server, client);
-        it->setReplay(103, server, client);
+        it->sendMessageToAll(RPL_JOIN(client.getNickname(), it->isOp(client), client.getUsername(), client.getHostname(), it->getName()));
+        it->sendMessageToAll(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n");
+        if (it->getTopic() != "")
+        {
+            it->setReplay(332, server, client);
+            it->setReplay(333, server, client);
+        }
+        sendNames(*it, client, server);
         it->setReplay(366, server, client);
-        it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
-            // if (it->isInviteOnly() && !it->isInvited(client))
-            // {
-            //     client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), channels[i]));
-            //     continue;
-            // }
-            // if (it->isFull())
-            // {
-            //     client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), channels[i]));
-            //     continue;
-            // }
-        //     if (it->isBanned(client.getClientSockfd()))
-        //     {
-        //         client.setSendBuffer(ERR_BANNEDFROMCHAN(server.getHostname(), client.getNickname(), channels[i]));
-        //         continue;
-        //     }
-        //     if (it->isOperator(client.getClientSockfd()))
-        //     {
-        //         client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channels[i]));
-        //         continue;
-        //     }
-        // }
+        // it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
+        channel_index++;
     }
 }

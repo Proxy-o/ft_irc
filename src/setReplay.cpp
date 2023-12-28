@@ -8,25 +8,28 @@ void Client::setReplay(int replay, Server &server)
     switch (replay)
     {
     case 001:
-        message = RPL_WELCOME(server.getHostname(), client.getNickname());
+        message = RPL_WELCOME(client.getHostname(), client.getNickname());
         break;
     case 002:
-        message = RPL_YOURHOST(server.getHostname(), client.getNickname());
+        message = RPL_YOURHOST(client.getHostname(), client.getNickname());
         break;
     case 003:
-        message = RPL_CREATED(server.getHostname(), client.getNickname(), server.getCreationDate());
+        message = RPL_CREATED(client.getHostname(), client.getNickname(), server.getCreationDate());
         break;
     case 004:
-        message = RPL_MYINFO(server.getHostname(), client.getNickname());
+        message = RPL_MYINFO(client.getHostname(), client.getNickname());
         break;
     case 005:
-        message = RPL_ISUPPORT(server.getHostname(), client.getNickname());
+        message = RPL_ISUPPORT(client.getHostname(), client.getNickname());
         break;
     case 381:
         message = RPL_YOUREOPER(server.getHostname(), client.getNickname());
         break;
     case 401:
         message = ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), client.getNickname());
+        break;
+    case 404:
+        message = ERR_CANNOTSENDTOCHAN(server.getHostname(), client.getNickname(), client.getNickname());
         break;
     case 431:
         message = ERR_NONICKNAMEGIVEN(server.getHostname(), client.getNickname());
@@ -48,7 +51,7 @@ void Client::setReplay(int replay, Server &server)
 }
 void Channel::setReplay(int replay, Server &server, Client &client)
 {
-    std::string message;
+    std::string message = "";
     switch (replay)
     {
     case 403:
@@ -60,24 +63,14 @@ void Channel::setReplay(int replay, Server &server, Client &client)
     case 102:
         message = ERR_USERONCHANNEL(server.getHostname(), client.getUsername(), client.getNickname(), this->getName());
         break;
-    case 103:
-        {
-            std::map<int, Client &>::iterator it = this->getClients().begin();
-            for (; it != this->getClients().end(); it++)
-            {
-                if (it->second == client)
-                    continue;
-                message += this->isOp(it->second);
-                message += it->second.getNickname() + " ";
-            }
-            message += "\r\n";
-            break;
-        }
-    case 353:
-        message = RPL_NAMREPLY(server.getHostname(), client.getNickname(), this->getName());
-        break;
     case 366:
         message = RPL_ENDOFNAMES(server.getHostname(), client.getNickname(), this->getName());
+        break;
+    case 332:
+        message = RPL_TOPIC(server.getHostname(), client.getNickname(), this->getName(), this->getTopic());
+        break;
+    case 333:
+        message = RPL_TOPICWHOTIME(server.getHostname(), client.getNickname(), this->getName(), this->getTopicSetter(), this->getTopicDate());
         break;
     default:
         message = "NOT IMPLEMENTED YET\r\n";

@@ -30,10 +30,6 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
     close(it->fd);
     poll_fds.erase(it);
     PRINT(RED << "Client disconnected" << RESET);
-    
-
-
-
 }
 
 int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator it)
@@ -41,26 +37,21 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
     char buffer[513];
     bzero(buffer, sizeof(buffer));
     int recv_status = recv(it->fd, buffer, sizeof(buffer) - 1, 0);
-    if (recv_status == -1)
+    Client &client = this->getClient(it->fd);
+    if (recv_status <= 0 || client.needToQuit())
     {
-        PRINT_ERR(RED << "recv Error" << RESET);
-        return FAIL;
-    }
-    else if (recv_status == 0)
-    {
-
         removeClient(poll_fds, it);
         return FAIL;
     }
-    else
+    std::string message(buffer);
+    if (message.find("\n") == std::string::npos && (client.getRecvBuffer().length() >= 512 || message.length() >= 512))
     {
-        std::string message(buffer);
-        Client &client = this->getClient(it->fd);
-        client.setRecvBuffer(message);
-        PRINT(YELLOW << "CLIENT : " << client.getRecvBuffer() << RESET);
-        return SUCCESS;
+        client.resetRecvBuffer();
+        return FAIL;
     }
-
+    client.setRecvBuffer(message);
+    if (message.find("PING") != 0 && message.find("PONG") != 0)
+        PRINT(YELLOW << "<= CLIENT  " << client.getNickname() << " : " << client.getRecvBuffer() << RESET);
     return SUCCESS;
 }
 
@@ -106,6 +97,9 @@ int Server::runLoop()
                 std::string message = client.getSendBuffer();
                 if (message != "")
                 {
+                    // DO NOT PRINT PING PONG
+                    if (message.find("PING") != 0 && message.find("PONG") != 0)
+                        PRINT(BLUE << "=> SERVER  : " << message << RESET);
                     int send_status = send(it->fd, message.c_str(), message.length(), 0);
                     if (send_status == -1)
                     {
@@ -196,8 +190,7 @@ Channel &Server::getChannelByName(std::string name)
 {
     if (name == "")
         return *(this->_channels.end());
-    if (name[0] != '#')
-        name = "#" + name;
+
     std::vector<Channel>::iterator it = this->_channels.begin();
     for (; it != this->_channels.end(); it++)
     {
@@ -228,4 +221,17 @@ std::string Server::getHostname()
 std::vector<Channel> &Server::getChannels()
 {
     return this->_channels;
+}
+
+void Server::removeChannel(Channel &channel)
+{
+    std::vector<Channel>::iterator it = this->_channels.begin();
+    for (; it != this->_channels.end(); it++)
+    {
+        if (it->getName() == channel.getName())
+        {
+            this->_channels.erase(it);
+            break;
+        }
+    }
 }

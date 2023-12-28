@@ -3,11 +3,9 @@
 
 static bool nickIsValid(std::string nickname)
 {
-    if (nickname.find_first_of(" ,.@?!*") != std::string::npos)
+    if (nickname.find_first_of(",.@?!*") != std::string::npos)
         return false;
     if (nickname.find_first_of("123456789$:#") == 0)
-        return false;
-    if (nickname.length() > 9)
         return false;
     else
         return true;
@@ -26,6 +24,7 @@ void nick(std::string &message, Client &client, Server &server)
     std::string nickname = tokens[1];
     if (nickIsValid(nickname) == false)
     {
+
         client.setSendBuffer(ERR_ERRONEUSNICKNAME(server.getHostname(), client.getNickname(), nickname));
         return;
     }
@@ -33,9 +32,16 @@ void nick(std::string &message, Client &client, Server &server)
     Client &old_client = server.getClientByNickname(nickname);
     if (old_client != server.getClient(-1) && old_client != client)
     {
-        client.setSendBuffer(ERR_NICKNAMEINUSE(server.getHostname(), client.getNickname(), nickname));
+        std::string old_nickname = client.getNickname();
+        old_nickname == "" ? old_nickname = "*" : old_nickname;
+        client.setSendBuffer(ERR_NICKNAMEINUSE(server.getHostname(), old_nickname, nickname));
         return;
     }
-    client.setSendBuffer(RPL_NICK(server.getHostname(), client.getNickname(), client.getUsername(), nickname));
+    std::string nick_to_send;
+    if (client.getNickname() == "*" || client.getNickname() == "")
+        nick_to_send = nickname;
+    else
+        nick_to_send = client.getNickname();
+    client.setSendBuffer(RPL_NICK(client.getHostname(), nick_to_send, client.getUsername(), nickname));
     client.setNickname(nickname);
 }

@@ -3,7 +3,7 @@
 
 static bool isValidCommand(std::string line)
 {
-    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0)
+    if (line.find("NICK") == 0 || line.find("USER") == 0 || line.find("PASS") == 0 || line.find("OPER") == 0 || line.find("PRIVMSG") == 0 || line.find("JOIN") == 0 || line.find("PING") == 0 || line.find("PONG") == 0 || line.find("TOPIC") == 0 || line.find("KICK") == 0 || line.find("MODE") == 0 || line.find("PART") == 0 || line.find("QUIT") == 0)
         return true;
     return false;
 }
@@ -12,7 +12,6 @@ int Server::parseMessage(int fd)
 {
     Client &client = this->getClient(fd);
     std::string message = client.getRecvBuffer();
-    // PRINT("message: " + message);
     if (message.find("\n") != std::string::npos)
     {
 
@@ -24,8 +23,8 @@ int Server::parseMessage(int fd)
             formatMessage(line);
             if (client.isRegistered() == false && isValidCommand(line) == true)
                 registerClient(line, client);
-            // else if (client.isRegistered() && isValidCommand(line) == true)
-            // {
+            else if (client.isRegistered() && isValidCommand(line) == true)
+            {
                 if (line.find("NICK") == 0)
                 {
                     nick(line, client, *this);
@@ -50,13 +49,34 @@ int Server::parseMessage(int fd)
                 {
                     join(line, client, *this);
                 }
-            //  }
-            //     else
-            //     {
-            //         client.setSendBuffer("INVALID COMMAND: " + line +"\r\n");
-            //     }
+                else if (line.find("PONG") == 0 || line.find("PING") == 0)
+                {
+                    ping_pong(line, client);
+                }
+                else if (line.find("TOPIC") == 0)
+                {
+                    topic(line, client, *this);
+                }
+                else if (line.find("KICK") == 0)
+                {
+                    kick(line, client, *this);
+                }
+                else if (line.find("MODE") == 0)
+                {
+                    mode(line, client, *this);
+                }
+                else if (line.find("PART") == 0)
+                {
+                    part(line, client, *this);
+                }
+                else if (line.find("QUIT") == 0)
+                {
+                    quit(line, client);
+                }
+            }
             client.resetRecvBuffer();
         }
     }
+
     return SUCCESS;
 }

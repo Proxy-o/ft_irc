@@ -11,13 +11,14 @@ class Server;
 class Channel
 {
 private:
-    std::map<int, Client &> _clients;
-    std::map<int, Client &> _chan_ops;
+    std::map<int, Client *> _clients;
+    std::map<int, Client *> _chan_ops;
     std::string _topic;
+    std::string _topic_setter;
+    std::string _topic_date;
     std::string _name;
     std::string _password;
-    bool _isPrivate;
-    bool _isSecret;
+    bool _isTopicSet;
     bool _isInviteOnly;
 
 
@@ -28,6 +29,7 @@ public:
     Channel &operator=(const Channel &channel);
     bool operator==(const Channel &channel) const;
     bool operator!=(const Channel &channel) const;
+
     // ************SETTERS************
     void setOperator(Client *op, int op_fd);
     void setTopic(std::string topic);
@@ -36,6 +38,9 @@ public:
     void setIsPrivate(bool status);
     void setIsSecret(bool status);
     void setIsInviteOnly(bool status);
+    void setTopicSetter(Client &client);
+    void setTopicDate();
+    void setModes(std::string modes);
 
     // ************GETTERS************
     std::string getTopic();
@@ -46,8 +51,10 @@ public:
     bool isPrivate();
     bool isSecret();
     bool isInviteOnly();
-    std::map<int, Client &> &getClients();
-    std::map<int, Client &> &getChanOps();
+    std::map<int, Client *> &getClients();
+    std::map<int, Client *> &getChanOps();
+    std::string getTopicSetter();
+    std::string getTopicDate();
 
     // ************METHODS************
     void addClient(Client &client);
@@ -58,4 +65,5 @@ public:
     void sendMessageToAllExcept(std::string message, Client &client);
     void setReplay(int replay, Server &server, Client &client);
     bool clientExist(Client &client);
+    void removeOp(Client &client);
 };
