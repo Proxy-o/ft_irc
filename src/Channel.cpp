@@ -1,4 +1,6 @@
 #include "Channel.hpp"
+#include <ctime>
+#include <cstdio>
 
 Channel::Channel()
 {
@@ -179,6 +181,7 @@ void Channel::setTopicSetter(Client &setter)
     this->_topic_setter = setter_name;
 
 }
+
 
 void Channel::setTopicDate()
 {

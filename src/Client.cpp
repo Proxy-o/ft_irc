@@ -159,7 +159,7 @@ std::string Client::getClientHostname()
 
     getpeername(this->_client_sockfd, (struct sockaddr *)&addr, &len);
     int result = getnameinfo((struct sockaddr *)&addr, sizeof(struct sockaddr_storage),
-                             hostname, NI_MAXHOST, nullptr, 0, 0);
+                             hostname, NI_MAXHOST, NULL, 0, 0);
     if (result != 0)
     {
         return gai_strerror(result);
