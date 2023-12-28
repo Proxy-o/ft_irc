@@ -17,7 +17,7 @@ void join(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> keys;
     std::vector<std::string> params = ft_split(message, " ");
-    size_t channel_index = 0;
+    size_t channel_index = -1;
     // PRINT("JOIN");
     if (params.size() < 2)
     {
@@ -29,12 +29,11 @@ void join(std::string &message, Client &client, Server &server)
         keys = ft_split(params[2], ",");
     for (size_t i = 0; i < channels.size(); i++)
     {
+        channel_index++;
         if (channels[i].find_first_of(" ,\a\n\t\r\v\b\f\r\n") != std::string::npos)
             continue;
         if (channels[i][0] != '#') // &
-        {
-            continue;
-        }
+            channels[i] = "#" + channels[i];
         std::vector<Channel>::iterator it = server.getChannels().begin();
         bool channel_exist = false;
         for (; it != server.getChannels().end(); it++)
@@ -66,6 +65,11 @@ void join(std::string &message, Client &client, Server &server)
                     client.setSendBuffer(ERR_BADCHANNELKEY(server.getHostname(), client.getNickname(), it->getName()));
                     continue;
                 }
+                if (keys[channel_index] != it->getPassword())
+                {
+                    client.setSendBuffer(ERR_BADCHANNELKEY(server.getHostname(), client.getNickname(), it->getName()));
+                    continue;
+                }
             }
             it->addClient(client);
         }
@@ -80,6 +84,5 @@ void join(std::string &message, Client &client, Server &server)
         sendNames(*it, client, server);
         it->setReplay(366, server, client);
         // it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
-        channel_index++;
     }
 }

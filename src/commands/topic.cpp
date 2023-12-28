@@ -3,7 +3,6 @@
 void topic(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> tokens = ft_split(message, " ");
-
     if (tokens.size() < 2)
     {
         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "TOPIC"));

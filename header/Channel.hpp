@@ -18,8 +18,9 @@ private:
     std::string _topic_date;
     std::string _name;
     std::string _password;
-    bool _isTopicSet;
+    int _clients_limit;
     bool _isInviteOnly;
+    bool _isTopic;
 
 
 public:
@@ -41,6 +42,8 @@ public:
     void setTopicSetter(Client &client);
     void setTopicDate();
     void setModes(std::string modes);
+    void setClientsLimit(int limit);
+    void setIsTopic(bool status);
 
     // ************GETTERS************
     std::string getTopic();
@@ -55,6 +58,8 @@ public:
     std::map<int, Client *> &getChanOps();
     std::string getTopicSetter();
     std::string getTopicDate();
+    int getClientsLimit();
+    bool isTopic();
 
     // ************METHODS************
     void addClient(Client &client);
@@ -66,4 +71,5 @@ public:
     void setReplay(int replay, Server &server, Client &client);
     bool clientExist(Client &client);
     void removeOp(Client &client);
+    Client *getClientByNickname(std::string nickname);
 };
