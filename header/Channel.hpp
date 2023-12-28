@@ -13,6 +13,7 @@ class Channel
 private:
     std::map<int, Client *> _clients;
     std::map<int, Client *> _chan_ops;
+    std::map<int, Client *> _invited_clients;
     std::string _topic;
     std::string _topic_setter;
     std::string _topic_date;
@@ -56,6 +57,7 @@ public:
     bool isInviteOnly();
     std::map<int, Client *> &getClients();
     std::map<int, Client *> &getChanOps();
+    std::map<int, Client *> &getInvitedClients();
     std::string getTopicSetter();
     std::string getTopicDate();
     int getClientsLimit();
@@ -72,4 +74,5 @@ public:
     bool clientExist(Client &client);
     void removeOp(Client &client);
     Client *getClientByNickname(std::string nickname);
+    bool isInvited(Client &client);
 };

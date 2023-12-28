@@ -71,6 +71,24 @@ void join(std::string &message, Client &client, Server &server)
                     continue;
                 }
             }
+            if (it->isInviteOnly())
+            {
+                if (!it->isInvited(client))
+                {
+                    client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), it->getName()));
+                    continue;
+                }
+                it->getInvitedClients().erase(client.getClientSockfd());
+            }
+            if (it->getModes().find("l") != std::string::npos)
+            {
+                size_t limit = it->getClientsLimit();
+                if (it->getClients().size() >= limit)
+                {
+                    client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), it->getName()));
+                    continue;
+                }
+            }
             it->addClient(client);
         }
         std::string realname = (client.getRealname().find_last_of(" ") != std::string::npos) ? ":" + client.getRealname() : client.getRealname();
@@ -83,6 +101,5 @@ void join(std::string &message, Client &client, Server &server)
         }
         sendNames(*it, client, server);
         it->setReplay(366, server, client);
-        // it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
     }
 }

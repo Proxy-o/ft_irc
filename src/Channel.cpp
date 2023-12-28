@@ -143,6 +143,11 @@ bool Channel::isTopic()
     return (this->_isTopic);
 }
 
+std::map<int, Client *> &Channel::getInvitedClients()
+{
+    return (this->_invited_clients);
+}
+
 // ************METHODS************
 
 void Channel::addClient(Client &client)
@@ -249,4 +254,17 @@ Client *Channel::getClientByNickname(std::string nickname)
             return (it->second);
     }
     return (NULL);
+}
+
+bool Channel::isInvited(Client &client)
+{
+    if (this->_invited_clients.size() == 0)
+        return (false);
+    std::map<int, Client *>::iterator it = this->_invited_clients.begin();
+    for (; it != this->_clients.end(); it++)
+    {
+        if (it->second->getNickname() == client.getNickname())
+            return (true);
+    }
+    return (false);
 }

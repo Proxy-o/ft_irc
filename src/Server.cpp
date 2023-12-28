@@ -25,6 +25,10 @@ void Server::removeClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::it
         {
             it2->removeClient(this->getClient(it->fd));
         }
+        if (it2->getInvitedClients().find(it->fd) != it2->getInvitedClients().end())
+        {
+            it2->getInvitedClients().erase(it->fd);
+        }
     }
     this->_clients.erase(it->fd);
     close(it->fd);
@@ -206,6 +210,11 @@ Channel &Server::getChannelByName(std::string name)
 std::string Server::getPassword()
 {
     return this->_password;
+}
+
+std::map<int, Client> &Server::getClients()
+{
+    return this->_clients;
 }
 
 void Server::setHostname(std::string hostname)

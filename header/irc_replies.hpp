@@ -53,6 +53,11 @@
 // MODE
 #define RPL_CHANNELMODEIS(hostname, client, channel_name, modes) (":" + hostname + " 324 " + client + " " + channel_name + " " + modes + "\r\n")
 #define ERR_UNKNOWNMODE(hostname, client, mode) (":" + hostname + " 472 " + client + " " + mode + " :is unknown mode char to me\r\n")
+#define ERR_CHANNELISFULL(hostname, client, channel_name) (":" + hostname + " 471 " + client + " " + channel_name + " :Cannot join channel (+l)\r\n")
 
 // PART
 #define RPL_PART(hostname, channel_name, client, username, reason) (":" + client + "!" + username + "@" + hostname + "  PART " + channel_name + " :" + reason + "\r\n")
+
+// INVITE
+#define ERR_INVITEONLYCHAN(hostname, client, channel_name) (":" + hostname + " 473 " + client + " " + channel_name + " :Cannot join channel (+i)\r\n")
+#define RPL_INVITING(hostname, client, nickname, channel_name) (":" + hostname + " 341 " + client + " " + nickname + " " + channel_name + "\r\n")
