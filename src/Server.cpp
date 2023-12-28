@@ -222,3 +222,16 @@ std::vector<Channel> &Server::getChannels()
 {
     return this->_channels;
 }
+
+void Server::removeChannel(Channel &channel)
+{
+    std::vector<Channel>::iterator it = this->_channels.begin();
+    for (; it != this->_channels.end(); it++)
+    {
+        if (it->getName() == channel.getName())
+        {
+            this->_channels.erase(it);
+            break;
+        }
+    }
+}

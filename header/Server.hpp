@@ -71,6 +71,7 @@ public:
     int registerClient(std::string line, Client &client);
     Client &getClientByNickname(std::string nickname);
     Channel &getChannelByName(std::string name);
+    void removeChannel(Channel &channel);
     // ************ STATIC FUNCTIONS ************
 };
 

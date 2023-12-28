@@ -46,7 +46,7 @@ void kick(std::string &message, Client &client, Server &server)
     {
         if (tokens[3].find(":") == 0)
         {
-            reason = message.substr(message.find(":")+1);
+            reason = message.substr(message.find(":") + 1);
         }
         else
         {
@@ -55,4 +55,6 @@ void kick(std::string &message, Client &client, Server &server)
     }
     channel.sendMessageToAll(RPL_KICK(server.getHostname(), channel.getName(), client.getNickname(), client_to_kick.getNickname(), reason));
     channel.removeClient(client_to_kick);
+    if (channel.getClients().size() == 0)
+        server.removeChannel(channel);
 }
