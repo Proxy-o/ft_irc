@@ -111,8 +111,6 @@ std::string Channel::getModes()
         modes += "l";
     if (this->_password != "")
         modes += " " + this->_password;
-    if (this->_clients_limit > 0)
-        modes += " " + std::to_string(this->_clients_limit);
     if (modes.length())
         modes = "+" + modes;
     return (modes);
