@@ -71,15 +71,6 @@ void join(std::string &message, Client &client, Server &server)
                     continue;
                 }
             }
-            if (it->isInviteOnly())
-            {
-                if (!it->isInvited(client))
-                {
-                    client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), it->getName()));
-                    continue;
-                }
-                it->getInvitedClients().erase(client.getClientSockfd());
-            }
             if (it->getModes().find("l") != std::string::npos)
             {
                 size_t limit = it->getClientsLimit();
@@ -88,6 +79,16 @@ void join(std::string &message, Client &client, Server &server)
                     client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), it->getName()));
                     continue;
                 }
+            }
+            if (it->isInviteOnly())
+            {
+                if (!it->isInvited(client))
+                {
+                    client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), it->getName()));
+                    continue;
+                }
+                else
+                    it->getInvitedClients().erase(client.getClientSockfd());
             }
             it->addClient(client);
         }
@@ -99,6 +100,7 @@ void join(std::string &message, Client &client, Server &server)
             it->setReplay(332, server, client);
             it->setReplay(333, server, client);
         }
+        client.setSendBuffer(RPL_CHANNELMODEIS(server.getHostname(), client.getNickname(), it->getName(), it->getModes()));
         sendNames(*it, client, server);
         it->setReplay(366, server, client);
     }

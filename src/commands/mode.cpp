@@ -103,11 +103,13 @@ void mode(std::string &message, Client &client, Server &server)
                 }
                 else if (mode[i] == 'l')
                 {
-                    if (tokens.size() < 4 + token_index - 1 || tokens[3 + token_index - 1].find_first_not_of("0123456789") != std::string::npos)
+                    if (tokens.size() < 4 + token_index - 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
                         return;
                     }
+                    if (tokens[3 + token_index - 1].find_first_not_of("0123456789") != std::string::npos)
+                        return;
                     // FORBIDDEN FUNCTION STOI !!!!!
                     channel.setClientsLimit(std::stoi(tokens[3 + token_index - 1]));
                     token_index++;
@@ -147,11 +149,6 @@ void mode(std::string &message, Client &client, Server &server)
                 }
                 else if (mode[i] == 'l')
                 {
-                    if (tokens.size() < 4 + token_index - 1 || tokens[3 + token_index - 1].find_first_not_of("0123456789") != std::string::npos)
-                    {
-                        client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
-                        return;
-                    }
                     channel.setClientsLimit(0);
                     //look for message to send
                 }
