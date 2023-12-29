@@ -42,7 +42,7 @@ void kick(std::string &message, Client &client, Server &server)
     }
 
     std::string reason = "no reason";
-    if (tokens.size() > 3)
+    if (tokens.size() > 4)
     {
         if (tokens[3].find(":") == 0)
         {

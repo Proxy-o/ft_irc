@@ -110,7 +110,6 @@ void mode(std::string &message, Client &client, Server &server)
                     }
                     if (tokens[3 + token_index - 1].find_first_not_of("0123456789") != std::string::npos)
                         return;
-                    // FORBIDDEN FUNCTION STOI !!!!!
                     channel.setClientsLimit(std::atoi(tokens[3 + token_index - 1].c_str()));
                     token_index++;
                     //look for message to send
