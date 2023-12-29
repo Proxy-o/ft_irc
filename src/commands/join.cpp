@@ -71,6 +71,7 @@ void join(std::string &message, Client &client, Server &server)
                     continue;
                 }
             }
+            std::string mode = ft_split(it->getModes(), " ")[0];
             if (it->getModes().find("l") != std::string::npos)
             {
                 size_t limit = it->getClientsLimit();

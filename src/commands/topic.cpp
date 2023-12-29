@@ -44,7 +44,7 @@ void topic(std::string &message, Client &client, Server &server)
         }
         if (channel.isTopic())
         {
-            if (channel.isOp(client) != "@")
+            if (channel.isOp(client) != "@" && client.isOperator() == false)
             {
                 client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
                 return;

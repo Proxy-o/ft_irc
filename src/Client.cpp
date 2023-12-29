@@ -138,12 +138,12 @@ bool Client::isWelcomed()
 
 void Client::setIsOperator(bool status)
 {
-    this->is_operator = status;
+    this->_is_operator = status;
 }
 
 bool Client::isOperator()
 {
-    return this->is_operator;
+    return this->_is_operator;
 }
 
 int Client::getClientSockfd()

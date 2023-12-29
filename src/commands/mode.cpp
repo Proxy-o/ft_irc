@@ -62,7 +62,7 @@ void mode(std::string &message, Client &client, Server &server)
         client.setSendBuffer(RPL_CHANNELMODEIS(server.getHostname(), client.getNickname(), channel.getName(), channel.getModes()));
         return;
     }
-    if (channel.isOp(client) != "@")
+    if (channel.isOp(client) != "@" && client.isOperator() == false)
     {
         client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
         return;
