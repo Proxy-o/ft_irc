@@ -42,6 +42,14 @@ void topic(std::string &message, Client &client, Server &server)
         {
             msg = tokens[2];
         }
+        if (channel.isTopic())
+        {
+            if (channel.isOp(client) != "@")
+            {
+                client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
+                return;
+            }
+        }
         channel.setTopic(msg);
         channel.setTopicSetter(client);
         channel.setTopicDate();

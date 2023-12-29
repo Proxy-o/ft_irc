@@ -52,6 +52,11 @@ void mode(std::string &message, Client &client, Server &server)
         client.setSendBuffer(ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(), targetName));
         return;
     }
+    if (channel.clientExist(client) == false)
+    {
+        client.setSendBuffer(ERR_NOTONCHANNEL(server.getHostname(), client.getNickname(), channel.getName()));
+        return;
+    }
     if (tokens.size() == 2)
     {
         client.setSendBuffer(RPL_CHANNELMODEIS(server.getHostname(), client.getNickname(), channel.getName(), channel.getModes()));

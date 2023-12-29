@@ -7,7 +7,7 @@ Channel::Channel()
     this->_isInviteOnly = false;
     this->_topic = "";
     this->_clients_limit = 0;
-    this->_isTopic = false;
+    this->_isTopic = true;
 }
 
 Channel::Channel(Client *op, int op_fd)
@@ -16,7 +16,7 @@ Channel::Channel(Client *op, int op_fd)
     this->_clients.insert(std::pair<int, Client *>(op_fd, op));
     this->_isInviteOnly = false;
     this->_topic = "";
-    this->_isTopic = false;
+    this->_isTopic = true;
     this->_clients_limit = 0;
 }
 
@@ -103,7 +103,7 @@ std::string Channel::getModes()
     std::string modes = "";
     if (this->_isInviteOnly)
         modes += "i";
-    if (this->_topic.length() > 0)
+    if (this->_isTopic)
         modes += "t";
     if (this->_password != "")
         modes += "k";
