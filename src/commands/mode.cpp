@@ -128,7 +128,7 @@ void mode(std::string &message, Client &client, Server &server)
                 }
             }
             mode = "+" + applied_modes + applied_modes_args;
-            channel.sendMessageToAll(RPL_MODE(server.getHostname(), channel.getName(), mode));
+            channel.sendMessageToAll(RPL_MODE(client.getNickname(), channel.getName(), mode));
             return;
         }
         else if (mode[0] == '-')
@@ -171,7 +171,7 @@ void mode(std::string &message, Client &client, Server &server)
                 }
             }
             mode = "-" + applied_modes + applied_modes_args;
-            channel.sendMessageToAll(RPL_MODE(server.getHostname(), channel.getName(), mode));
+            channel.sendMessageToAll(RPL_MODE(client.getNickname(), channel.getName(), mode));
         }
         else
         {

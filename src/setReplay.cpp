@@ -57,9 +57,6 @@ void Channel::setReplay(int replay, Server &server, Client &client)
     case 403:
         message = ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(),this->getName());
         break;
-    case 101:
-        message = RPL_MODE(server.getHostname(), this->getName(), "+" + this->getModes());
-        break;
     case 102:
         message = ERR_USERONCHANNEL(server.getHostname(), client.getUsername(), client.getNickname(), this->getName());
         break;

@@ -33,7 +33,7 @@
 // CHANNEL
 #define ERR_NOSUCHCHANNEL(hostname, client, channel_name) (":" + hostname + " 403 " + client + " " + channel_name + " :No such channel\r\n")
 #define RPL_JOIN(clientname, isop, clientnick, hostname, channel_name) (":" + clientname + "!~" + isop + clientnick + "@" + hostname + " JOIN :" + channel_name + "\r\n")
-#define RPL_MODE(hostname, channel_name, modes) (":" + hostname + " MODE " + channel_name + " " + modes + "\r\n")
+#define RPL_MODE(nickname, channel_name, modes) (":" + nickname + " MODE " + channel_name + " " + modes + "\r\n")
 #define RPL_NAMREPLY(hostname, client, channel_name) (":" + hostname + " 353 " + client + " = " + channel_name + " :")
 #define RPL_ENDOFNAMES(hostname, client, channel_name) (":" + hostname + " 366 " + client + " " + channel_name + " :End of NAMES list\r\n")
 #define ERR_USERONCHANNEL(hostname, clientname, clientnick, channel_name) (":" + hostname + " " + clientname + " " + clientnick + " " + channel_name + " :is already on channel\r\n")
