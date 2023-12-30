@@ -266,3 +266,16 @@ bool Channel::isInvited(Client &client)
     }
     return (false);
 }
+
+bool Channel::clientIsInvited(Client &client)
+{
+    if (this->_invited_clients.size() == 0)
+        return (false);
+    std::map<int, Client *>::iterator it = this->_invited_clients.begin();
+    for (; it != this->_invited_clients.end(); it++)
+    {
+        if (it->second->getNickname() == client.getNickname())
+            return (true);
+    }
+    return (false);
+}

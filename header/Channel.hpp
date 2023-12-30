@@ -75,4 +75,5 @@ public:
     void removeOp(Client &client);
     Client *getClientByNickname(std::string nickname);
     bool isInvited(Client &client);
+    bool clientIsInvited(Client &client);
 };

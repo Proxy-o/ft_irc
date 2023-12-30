@@ -61,3 +61,4 @@
 // INVITE
 #define ERR_INVITEONLYCHAN(hostname, client, channel_name) (":" + hostname + " 473 " + client + " " + channel_name + " :Cannot join channel (+i)\r\n")
 #define RPL_INVITING(hostname, client, nickname, channel_name) (":" + hostname + " 341 " + client + " " + nickname + " " + channel_name + "\r\n")
+#define RPL_ENDOFINVITELIST(hostname, client) (":" + hostname + " 357 " + client + " :End of invite list\r\n")
