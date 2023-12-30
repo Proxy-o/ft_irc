@@ -1,40 +1,37 @@
 #include "commands.hpp"
 
-void ft_addOp(Server &server, Channel &channel, Client &client, std::string &nickname)
+int ft_addOp(Server &server, Channel &channel, Client &client, std::string &nickname)
 {
     Client *toOp = channel.getClientByNickname(nickname);
     if (toOp == NULL)
     {
         client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nickname, channel.getName()));
+        return (0);
     }
-    else
-    {
-        channel.addop(*toOp);
-        //look for message to send
-    }
+    channel.addop(*toOp);
+    return (1);
 }
 
-void ft_addKey(Channel &channel, std::string &key)
+int ft_addKey(Channel &channel, std::string &key)
 {
     if (key != "")
     {
         channel.setPassword(key);
-        //look for message to send
+        return 1;
     }
+    return 0;
 }
 
-void ft_removeOp(Server &server, Channel &channel, Client &client, std::string &nickname)
+int ft_removeOp(Server &server, Channel &channel, Client &client, std::string &nickname)
 {
     Client *toOp = channel.getClientByNickname(nickname);
     if (toOp == NULL)
     {
         client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nickname, channel.getName()));
+        return (0);
     }
-    else
-    {
-        channel.removeOp(*toOp);
-        //look for message to send
-    }
+    channel.removeOp(*toOp);
+    return (1);
 }
 
 void mode(std::string &message, Client &client, Server &server)
@@ -68,6 +65,8 @@ void mode(std::string &message, Client &client, Server &server)
         return;
     }
     std::string mode;
+    std::string applied_modes = "";
+    std::string applied_modes_args = "";
     size_t token_index = 1;
     if (tokens.size() > 2)
     {
@@ -76,87 +75,101 @@ void mode(std::string &message, Client &client, Server &server)
         {
             for (size_t i = 1; i < mode.size(); i++)
             {
+                size_t param_index = 3 + token_index - 1;
+                token_index++;
                 if (mode[i] == 'o')
                 {
-                    if (tokens.size() < 4 + token_index - 1)
+                    if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
                         return;
                     }
-                    ft_addOp(server, channel, client, tokens[3 + token_index - 1]);
-                    token_index++;
+                    if (ft_addOp(server, channel, client, tokens[param_index]) == 0)
+                        continue;
+                    applied_modes += "o";
+                    applied_modes_args += " " + tokens[param_index];
                 }
                 else if (mode[i] == 'k')
                 {
-                    if (tokens.size() < 4 + token_index - 1)
+                    if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
                         return;
                     }
-                    ft_addKey(channel, tokens[3 + token_index - 1]);
-                    token_index++;
+                    if (ft_addKey(channel, tokens[param_index]) == 0)
+                        continue;
+                    applied_modes += "k";
+                    applied_modes_args += " " + tokens[param_index];
                 }
                 else if (mode[i] == 'i')
                 {
                     channel.setIsInviteOnly(true);
-                    //look for message to send
+                    applied_modes += "i";
                 }
                 else if (mode[i] == 'l')
                 {
-                    if (tokens.size() < 4 + token_index - 1)
+                    if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
                         return;
                     }
-                    if (tokens[3 + token_index - 1].find_first_not_of("0123456789") != std::string::npos)
-                        return;
-                    channel.setClientsLimit(std::atoi(tokens[3 + token_index - 1].c_str()));
-                    token_index++;
-                    //look for message to send
+                    if (tokens[param_index].find_first_not_of("0123456789") != std::string::npos)
+                        continue;
+                    channel.setClientsLimit(std::atoi(tokens[param_index].c_str()));
+                    applied_modes += "l";
+                    applied_modes_args += " " + tokens[param_index];
                 }
                 else if (mode[i] == 't')
                 {
                     channel.setIsTopic(true);
-                    //look for message to send
+                    applied_modes += "t";
                 }
             }
+            mode = "+" + applied_modes + applied_modes_args;
+            client.setSendBuffer(RPL_MODE(server.getHostname(), channel.getName(), mode));
             return;
         }
         else if (mode[0] == '-')
         {
+            PRINT("MODE -" << mode << std::endl);
             for (size_t i = 1; i < mode.size(); i++)
             {
+                size_t param_index = 3 + token_index - 1;
                 if (mode[i] == 'o')
                 {
-                    if (tokens.size() < 4 + token_index - 1)
+                    if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
                         return;
                     }
-                    ft_removeOp(server, channel, client, tokens[3 + token_index - 1]);
-                    //look for message to send
+                    if (ft_removeOp(server, channel, client, tokens[param_index]) == 0)
+                        continue;
+                    applied_modes += "o";
+                    applied_modes_args += " " + tokens[param_index];
                 }
                 else if (mode[i] == 'k')
                 {
                     channel.setPassword("");
-                    //look for message to send
+                    applied_modes += "k";
                 }
                 else if (mode[i] == 'i')
                 {
                     channel.setIsInviteOnly(false);
-                    //look for message to send
+                    applied_modes += "i";
                 }
                 else if (mode[i] == 'l')
                 {
                     channel.setClientsLimit(0);
-                    //look for message to send
+                    applied_modes += "l";
                 }
                 else if (mode[i] == 't')
                 {
                     channel.setIsTopic(false);
-                    //look for message to send
+                    applied_modes += "t";
                 }
             }
+            mode = "-" + applied_modes + applied_modes_args;
+            client.setSendBuffer(RPL_MODE(server.getHostname(), channel.getName(), mode));
         }
         else
         {
