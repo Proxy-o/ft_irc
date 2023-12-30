@@ -71,25 +71,28 @@ void join(std::string &message, Client &client, Server &server)
                     continue;
                 }
             }
-            std::string mode = ft_split(it->getModes(), " ")[0];
-            if (it->getModes().find("l") != std::string::npos)
+            if (it->getModes().length() > 0)
             {
-                size_t limit = it->getClientsLimit();
-                if (it->getClients().size() >= limit)
+                std::string mode = ft_split(it->getModes(), " ")[0];
+                if (it->getModes().find("l") != std::string::npos)
                 {
-                    client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), it->getName()));
-                    continue;
+                    size_t limit = it->getClientsLimit();
+                    if (it->getClients().size() >= limit)
+                    {
+                        client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), it->getName()));
+                        continue;
+                    }
                 }
-            }
-            if (it->isInviteOnly())
-            {
-                if (!it->isInvited(client))
+                if (it->isInviteOnly())
                 {
-                    client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), it->getName()));
-                    continue;
+                    if (!it->isInvited(client))
+                    {
+                        client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), it->getName()));
+                        continue;
+                    }
+                    else
+                        it->getInvitedClients().erase(client.getClientSockfd());
                 }
-                else
-                    it->getInvitedClients().erase(client.getClientSockfd());
             }
             it->addClient(client);
         }
