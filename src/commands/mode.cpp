@@ -131,7 +131,6 @@ void mode(std::string &message, Client &client, Server &server)
         }
         else if (mode[0] == '-')
         {
-            PRINT("MODE -" << mode << std::endl);
             for (size_t i = 1; i < mode.size(); i++)
             {
                 size_t param_index = 3 + token_index - 1;
