@@ -76,9 +76,9 @@ void mode(std::string &message, Client &client, Server &server)
             for (size_t i = 1; i < mode.size(); i++)
             {
                 size_t param_index = 3 + token_index - 1;
-                token_index++;
                 if (mode[i] == 'o')
                 {
+                    token_index++;
                     if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
@@ -91,6 +91,7 @@ void mode(std::string &message, Client &client, Server &server)
                 }
                 else if (mode[i] == 'k')
                 {
+                    token_index++;
                     if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
@@ -108,6 +109,7 @@ void mode(std::string &message, Client &client, Server &server)
                 }
                 else if (mode[i] == 'l')
                 {
+                    token_index++;
                     if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
@@ -126,7 +128,7 @@ void mode(std::string &message, Client &client, Server &server)
                 }
             }
             mode = "+" + applied_modes + applied_modes_args;
-            client.setSendBuffer(RPL_MODE(server.getHostname(), channel.getName(), mode));
+            channel.sendMessageToAll(RPL_MODE(server.getHostname(), channel.getName(), mode));
             return;
         }
         else if (mode[0] == '-')
@@ -136,6 +138,7 @@ void mode(std::string &message, Client &client, Server &server)
                 size_t param_index = 3 + token_index - 1;
                 if (mode[i] == 'o')
                 {
+                    token_index++;
                     if (tokens.size() < param_index + 1)
                     {
                         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
@@ -168,7 +171,7 @@ void mode(std::string &message, Client &client, Server &server)
                 }
             }
             mode = "-" + applied_modes + applied_modes_args;
-            client.setSendBuffer(RPL_MODE(server.getHostname(), channel.getName(), mode));
+            channel.sendMessageToAll(RPL_MODE(server.getHostname(), channel.getName(), mode));
         }
         else
         {
