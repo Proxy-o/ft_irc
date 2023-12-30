@@ -48,7 +48,7 @@ int Server::recvMessage(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iter
         return FAIL;
     }
     std::string message(buffer);
-    if (message.find("\n") == std::string::npos && (client.getRecvBuffer().length() >= 512 || message.length() >= 512))
+    if (message.find("\n") != std::string::npos && (client.getRecvBuffer().length() >= 512 || message.length() >= 512))
     {
         client.resetRecvBuffer();
         return FAIL;

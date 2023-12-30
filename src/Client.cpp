@@ -14,6 +14,7 @@ Client::Client(int sockfd)
     this->_nickname = "*";
     this->_hostname = getClientHostname();
     this->_need_to_quit = false;
+    this->setIsPassCorrect(false);
 }
 
 Client::~Client()

@@ -5,7 +5,7 @@
 #define RPL_WELCOME(hostname, client) (":" + hostname + " 001 " + client + " :Welcome to FT_IRC " + client + "\r\n")
 #define RPL_YOURHOST(hostname, client) (":" + hostname + " 002 " + client + " :Your host is CRI, running version 1.0\r\n")
 #define RPL_CREATED(hostname, client, date) (":" + hostname + " 003 " + client + " :This server was created " + date + "\r\n")
-#define RPL_MYINFO(hostname, client) (":" + hostname + " 004 " + client + " " + "CRI 1.0 io toks lok\r\n") // TODO: check this
+#define RPL_MYINFO(hostname, client) (":" + hostname + " 004 " + client + " " + "CRI 1.0 o lktio lok\r\n") // TODO: check this
 #define RPL_ISUPPORT(hostname, client) (":" + hostname + " 005 " + client + " " + "TARGMAX=PRIVMSG:1,KICK:1 TOPICLEN=307\r\n")
 
 // OPER
