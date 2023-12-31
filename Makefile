@@ -5,6 +5,7 @@ FLAGS = -Wall -Wextra -Werror -I header -std=c++98 -fsanitize=address
 CC = c++  
 OBJ_DIR = obj
 SRC_DIR = src
+BONUS_DIR = bonus
 HEADER_DIR = header
 
 all: $(NAME)
@@ -18,7 +19,8 @@ HEADER = $(wildcard $(HEADER_DIR)/*.hpp)
 $(NAME): $(OBJ) $(HEADER)
 	$(CC) $(FLAGS) $(OBJ) -o $@
 
-
+bonus: 
+	$(CC) $(FLAGS) $(BONUS_DIR)/bonusBot.cpp  -o bonusBot
 
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADER)
@@ -37,5 +39,5 @@ fclean: clean
 
 re: fclean $(NAME)
 
-.PHONY: all clean fclean re $(NAME)
+.PHONY: all clean fclean re $(NAME) bonus
 
