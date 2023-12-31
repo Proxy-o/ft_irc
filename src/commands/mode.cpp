@@ -1,5 +1,39 @@
 #include "commands.hpp"
 
+int ft_addOp(Server &server, Channel &channel, Client &client, std::string &nickname)
+{
+    Client *toOp = channel.getClientByNickname(nickname);
+    if (toOp == NULL)
+    {
+        client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nickname, channel.getName()));
+        return (0);
+    }
+    channel.addop(*toOp);
+    return (1);
+}
+
+int ft_addKey(Channel &channel, std::string &key)
+{
+    if (key != "")
+    {
+        channel.setPassword(key);
+        return 1;
+    }
+    return 0;
+}
+
+int ft_removeOp(Server &server, Channel &channel, Client &client, std::string &nickname)
+{
+    Client *toOp = channel.getClientByNickname(nickname);
+    if (toOp == NULL)
+    {
+        client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nickname, channel.getName()));
+        return (0);
+    }
+    channel.removeOp(*toOp);
+    return (1);
+}
+
 void mode(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> tokens = ft_split(message, " ");
@@ -15,118 +49,133 @@ void mode(std::string &message, Client &client, Server &server)
         client.setSendBuffer(ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(), targetName));
         return;
     }
-    if (channel != server.getChannel(""))
+    if (channel.clientExist(client) == false)
     {
-        if (tokens.size() == 2)
-        {
-            client.setSendBuffer(RPL_CHANNELMODEIS(server.getHostname(), client.getNickname(), channel.getName(), channel.getModes()));
-            return;
-        }
+        client.setSendBuffer(ERR_NOTONCHANNEL(server.getHostname(), client.getNickname(), channel.getName()));
+        return;
     }
-    else
+    if (tokens.size() == 2)
     {
-        client.setSendBuffer(ERR_NOSUCHCHANNEL(server.getHostname(), client.getNickname(), channel.getName()));
+        client.setSendBuffer(RPL_CHANNELMODEIS(server.getHostname(), client.getNickname(), channel.getName(), channel.getModes()));
+        return;
+    }
+    if (channel.isOp(client) != "@" && client.isOperator() == false)
+    {
+        client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
         return;
     }
     std::string mode;
+    std::string applied_modes = "";
+    std::string applied_modes_args = "";
+    size_t token_index = 1;
     if (tokens.size() > 2)
     {
-        if (tokens[2] == "+k")
+        mode = tokens[2];
+        if (mode[0] == '+')
         {
-            if (tokens.size() < 4)
+            for (size_t i = 1; i < mode.size(); i++)
             {
-                client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
-                return;
+                size_t param_index = 3 + token_index - 1;
+                if (mode[i] == 'o')
+                {
+                    token_index++;
+                    if (tokens.size() < param_index + 1)
+                    {
+                        client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
+                        return;
+                    }
+                    if (ft_addOp(server, channel, client, tokens[param_index]) == 0)
+                        continue;
+                    applied_modes += "o";
+                    applied_modes_args += " " + tokens[param_index];
+                }
+                else if (mode[i] == 'k')
+                {
+                    token_index++;
+                    if (tokens.size() < param_index + 1)
+                    {
+                        client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
+                        return;
+                    }
+                    if (ft_addKey(channel, tokens[param_index]) == 0)
+                        continue;
+                    applied_modes += "k";
+                    applied_modes_args += " " + tokens[param_index];
+                }
+                else if (mode[i] == 'i')
+                {
+                    channel.setIsInviteOnly(true);
+                    applied_modes += "i";
+                }
+                else if (mode[i] == 'l')
+                {
+                    token_index++;
+                    if (tokens.size() < param_index + 1)
+                    {
+                        client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
+                        return;
+                    }
+                    if (tokens[param_index].find_first_not_of("0123456789") != std::string::npos)
+                        continue;
+                    channel.setClientsLimit(std::atoi(tokens[param_index].c_str()));
+                    applied_modes += "l";
+                    applied_modes_args += " " + tokens[param_index];
+                }
+                else if (mode[i] == 't')
+                {
+                    channel.setIsTopic(true);
+                    applied_modes += "t";
+                }
             }
-            std::string password = tokens[3];
-            channel.setPassword(password);
-            if (channel.getModes().find("k") == std::string::npos)
-                channel.setModes(channel.getModes() + "k " + password);
-            else
-            {
-                mode = channel.getModes();
-                mode = mode.substr(0, mode.find(" ") + 1) + password;
-            }
+            mode = "+" + applied_modes + applied_modes_args;
+            channel.sendMessageToAll(RPL_MODE(client.getNickname(), channel.getName(), mode));
             return;
         }
-        else if (tokens[2] == "-k")
+        else if (mode[0] == '-')
         {
-            if (tokens.size() < 4)
+            for (size_t i = 1; i < mode.size(); i++)
             {
-                client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
-                return;
+                size_t param_index = 3 + token_index - 1;
+                if (mode[i] == 'o')
+                {
+                    token_index++;
+                    if (tokens.size() < param_index + 1)
+                    {
+                        client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
+                        return;
+                    }
+                    if (ft_removeOp(server, channel, client, tokens[param_index]) == 0)
+                        continue;
+                    applied_modes += "o";
+                    applied_modes_args += " " + tokens[param_index];
+                }
+                else if (mode[i] == 'k')
+                {
+                    channel.setPassword("");
+                    applied_modes += "k";
+                }
+                else if (mode[i] == 'i')
+                {
+                    channel.setIsInviteOnly(false);
+                    applied_modes += "i";
+                }
+                else if (mode[i] == 'l')
+                {
+                    channel.setClientsLimit(0);
+                    applied_modes += "l";
+                }
+                else if (mode[i] == 't')
+                {
+                    channel.setIsTopic(false);
+                    applied_modes += "t";
+                }
             }
-            std::string password = tokens[3];
-            if (channel.getPassword() != password)
-            {
-                client.setSendBuffer(ERR_BADCHANNELKEY(server.getHostname(), client.getNickname(), channel.getName()));
-                return;
-            }
-            channel.setPassword("");
-            if (channel.getModes().find("k") != std::string::npos)
-            {
-                mode = channel.getModes();
-                mode = mode.substr(0, mode.find(" "));
-            }
-            return;
+            mode = "-" + applied_modes + applied_modes_args;
+            channel.sendMessageToAll(RPL_MODE(client.getNickname(), channel.getName(), mode));
         }
-        else if (tokens[2] == "+o")
+        else
         {
-            if (tokens.size() < 4)
-            {
-                client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
-                return;
-            }
-            std::string nickname = tokens[3];
-            Client &target = server.getClientByNickname(nickname);
-            if (target == server.getClient(-1))
-            {
-                client.setSendBuffer(ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), nickname));
-                return;
-            }
-            if (!channel.clientExist(target))
-            {
-                client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nickname, channel.getName()));
-                return;
-            }
-            if (channel.isOp(client) == "@")
-            {
-                client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
-                return;
-            }
-            // check if already op
-            channel.addop(target);
-            return;
-        }
-        else if (tokens[2] == "-o")
-        {
-            if (tokens.size() < 4)
-            {
-                client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "MODE"));
-                return;
-            }
-            std::string nickname = tokens[3];
-            Client &target = server.getClientByNickname(nickname);
-            if (target == server.getClient(-1))
-            {
-                client.setSendBuffer(ERR_NOSUCHNICK(server.getHostname(), client.getNickname(), nickname));
-                return;
-            }
-            if (!channel.clientExist(target))
-            {
-                client.setSendBuffer(ERR_USERNOTINCHANNEL(server.getHostname(), client.getNickname(), nickname, channel.getName()));
-                return;
-            }
-            if (channel.isOp(client) == "@")
-            {
-                client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
-                return;
-            }
-            // check if already op
-            channel.removeOp(target);
-        }
-        else{
-            client.setSendBuffer(ERR_UNKNOWNMODE(server.getHostname(), client.getNickname(), tokens[2]));
+            client.setSendBuffer(ERR_UNKNOWNMODE(server.getHostname(), client.getNickname(), mode));
             return;
         }
     }

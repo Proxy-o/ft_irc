@@ -3,7 +3,6 @@
 void topic(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> tokens = ft_split(message, " ");
-
     if (tokens.size() < 2)
     {
         client.setSendBuffer(ERR_NEEDMOREPARAMS(server.getHostname(), client.getNickname(), "TOPIC"));
@@ -42,6 +41,14 @@ void topic(std::string &message, Client &client, Server &server)
         else
         {
             msg = tokens[2];
+        }
+        if (channel.isTopic())
+        {
+            if (channel.isOp(client) != "@" && client.isOperator() == false)
+            {
+                client.setSendBuffer(ERR_CHANOPRIVSNEEDED(server.getHostname(), client.getNickname(), channel.getName()));
+                return;
+            }
         }
         channel.setTopic(msg);
         channel.setTopicSetter(client);

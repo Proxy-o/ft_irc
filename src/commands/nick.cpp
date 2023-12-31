@@ -5,7 +5,7 @@ static bool nickIsValid(std::string nickname)
 {
     if (nickname.find_first_of(",.@?!*") != std::string::npos)
         return false;
-    if (nickname.find_first_of("123456789$:#") == 0)
+    if (nickname.find_first_of("123456789$:#&") == 0)
         return false;
     else
         return true;

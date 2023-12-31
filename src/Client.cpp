@@ -14,6 +14,7 @@ Client::Client(int sockfd)
     this->_nickname = "*";
     this->_hostname = getClientHostname();
     this->_need_to_quit = false;
+    this->setIsPassCorrect(false);
 }
 
 Client::~Client()
@@ -138,12 +139,12 @@ bool Client::isWelcomed()
 
 void Client::setIsOperator(bool status)
 {
-    this->is_operator = status;
+    this->_is_operator = status;
 }
 
 bool Client::isOperator()
 {
-    return this->is_operator;
+    return this->_is_operator;
 }
 
 int Client::getClientSockfd()

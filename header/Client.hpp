@@ -18,7 +18,7 @@ private:
     bool _is_registered;
     bool _pass_is_correct;
     bool _is_welcomed;
-    bool is_operator;
+    bool _is_operator;
     bool _need_to_quit;
 
 public:

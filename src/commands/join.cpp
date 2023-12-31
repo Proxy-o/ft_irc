@@ -17,7 +17,7 @@ void join(std::string &message, Client &client, Server &server)
 {
     std::vector<std::string> keys;
     std::vector<std::string> params = ft_split(message, " ");
-    size_t channel_index = 0;
+    size_t channel_index = -1;
     // PRINT("JOIN");
     if (params.size() < 2)
     {
@@ -29,12 +29,11 @@ void join(std::string &message, Client &client, Server &server)
         keys = ft_split(params[2], ",");
     for (size_t i = 0; i < channels.size(); i++)
     {
+        channel_index++;
         if (channels[i].find_first_of(" ,\a\n\t\r\v\b\f\r\n") != std::string::npos)
             continue;
         if (channels[i][0] != '#') // &
-        {
-            continue;
-        }
+            channels[i] = "#" + channels[i];
         std::vector<Channel>::iterator it = server.getChannels().begin();
         bool channel_exist = false;
         for (; it != server.getChannels().end(); it++)
@@ -66,6 +65,34 @@ void join(std::string &message, Client &client, Server &server)
                     client.setSendBuffer(ERR_BADCHANNELKEY(server.getHostname(), client.getNickname(), it->getName()));
                     continue;
                 }
+                if (keys[channel_index] != it->getPassword())
+                {
+                    client.setSendBuffer(ERR_BADCHANNELKEY(server.getHostname(), client.getNickname(), it->getName()));
+                    continue;
+                }
+            }
+            if (it->getModes().length() > 0)
+            {
+                std::string mode = ft_split(it->getModes(), " ")[0];
+                if (it->getModes().find("l") != std::string::npos)
+                {
+                    size_t limit = it->getClientsLimit();
+                    if (it->getClients().size() >= limit)
+                    {
+                        client.setSendBuffer(ERR_CHANNELISFULL(server.getHostname(), client.getNickname(), it->getName()));
+                        continue;
+                    }
+                }
+                if (it->isInviteOnly())
+                {
+                    if (!it->isInvited(client))
+                    {
+                        client.setSendBuffer(ERR_INVITEONLYCHAN(server.getHostname(), client.getNickname(), it->getName()));
+                        continue;
+                    }
+                    else
+                        it->getInvitedClients().erase(client.getClientSockfd());
+                }
             }
             it->addClient(client);
         }
@@ -77,9 +104,8 @@ void join(std::string &message, Client &client, Server &server)
             it->setReplay(332, server, client);
             it->setReplay(333, server, client);
         }
+        client.setSendBuffer(RPL_CHANNELMODEIS(server.getHostname(), client.getNickname(), it->getName(), it->getModes()));
         sendNames(*it, client, server);
         it->setReplay(366, server, client);
-        // it->sendMessageToAllExcept(":" + server.getHostname() + " " + client.getNickname() + " JOIN " + it->getName() + "\r\n", client);
-        channel_index++;
     }
 }

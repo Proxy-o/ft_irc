@@ -5,7 +5,7 @@
 #define RPL_WELCOME(hostname, client) (":" + hostname + " 001 " + client + " :Welcome to FT_IRC " + client + "\r\n")
 #define RPL_YOURHOST(hostname, client) (":" + hostname + " 002 " + client + " :Your host is CRI, running version 1.0\r\n")
 #define RPL_CREATED(hostname, client, date) (":" + hostname + " 003 " + client + " :This server was created " + date + "\r\n")
-#define RPL_MYINFO(hostname, client) (":" + hostname + " 004 " + client + " " + "CRI 1.0 io toks k\r\n")
+#define RPL_MYINFO(hostname, client) (":" + hostname + " 004 " + client + " " + "CRI 1.0 o lktio lok\r\n") // TODO: check this
 #define RPL_ISUPPORT(hostname, client) (":" + hostname + " 005 " + client + " " + "TARGMAX=PRIVMSG:1,KICK:1 TOPICLEN=307\r\n")
 
 // OPER
@@ -33,11 +33,11 @@
 // CHANNEL
 #define ERR_NOSUCHCHANNEL(hostname, client, channel_name) (":" + hostname + " 403 " + client + " " + channel_name + " :No such channel\r\n")
 #define RPL_JOIN(clientname, isop, clientnick, hostname, channel_name) (":" + clientname + "!~" + isop + clientnick + "@" + hostname + " JOIN :" + channel_name + "\r\n")
-#define RPL_MODE(hostname, channel_name, modes) (":" + hostname + " MODE " + channel_name + " " + modes + "\r\n")
+#define RPL_MODE(nickname, channel_name, modes) (":" + nickname + " MODE " + channel_name + " " + modes + "\r\n")
 #define RPL_NAMREPLY(hostname, client, channel_name) (":" + hostname + " 353 " + client + " = " + channel_name + " :")
 #define RPL_ENDOFNAMES(hostname, client, channel_name) (":" + hostname + " 366 " + client + " " + channel_name + " :End of NAMES list\r\n")
 #define ERR_USERONCHANNEL(hostname, clientname, clientnick, channel_name) (":" + hostname + " " + clientname + " " + clientnick + " " + channel_name + " :is already on channel\r\n")
-#define ERR_BADCHANNELKEY(hostname, client, channel_name) (":" + hostname + client + " " + channel_name + " :Cannot join channel (+k)\r\n")
+#define ERR_BADCHANNELKEY(hostname, client, channel_name) (":" + hostname + " 475 " + client + " " + channel_name + " :Cannot join channel (+k)\r\n")
 
 // TOPIC
 #define RPL_NOTOPIC(hostname, client, channel_name) (":" + hostname + " 331 " + client + " " + channel_name + " :No topic is set\r\n")
@@ -53,6 +53,12 @@
 // MODE
 #define RPL_CHANNELMODEIS(hostname, client, channel_name, modes) (":" + hostname + " 324 " + client + " " + channel_name + " " + modes + "\r\n")
 #define ERR_UNKNOWNMODE(hostname, client, mode) (":" + hostname + " 472 " + client + " " + mode + " :is unknown mode char to me\r\n")
+#define ERR_CHANNELISFULL(hostname, client, channel_name) (":" + hostname + " 471 " + client + " " + channel_name + " :Cannot join channel (+l)\r\n")
 
 // PART
 #define RPL_PART(hostname, channel_name, client, username, reason) (":" + client + "!" + username + "@" + hostname + "  PART " + channel_name + " :" + reason + "\r\n")
+
+// INVITE
+#define ERR_INVITEONLYCHAN(hostname, client, channel_name) (":" + hostname + " 473 " + client + " " + channel_name + " :Cannot join channel (+i)\r\n")
+#define RPL_INVITING(hostname, client, nickname, channel_name) (":" + hostname + " 341 " + client + " " + nickname + " " + channel_name + "\r\n")
+#define RPL_ENDOFINVITELIST(hostname, client) (":" + hostname + " 357 " + client + " :End of invite list\r\n")

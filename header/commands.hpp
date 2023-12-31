@@ -16,3 +16,4 @@ void part(std::string &message, Client &client, Server &server);
 void quit(std::string &message, Client &client);
 // channel commands
 void join(std::string &message, Client &client, Server &server);
+void invite(std::string &message, Client &client, Server &server);

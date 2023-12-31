@@ -58,6 +58,7 @@ public:
     std::string getPassword();
     std::string getHostname();
     std::vector<Channel> &getChannels();
+    std::map<int, Client> &getClients();
 
     // ************METHODS************
     int networkInit();

@@ -13,13 +13,15 @@ class Channel
 private:
     std::map<int, Client *> _clients;
     std::map<int, Client *> _chan_ops;
+    std::map<int, Client *> _invited_clients;
     std::string _topic;
     std::string _topic_setter;
     std::string _topic_date;
     std::string _name;
     std::string _password;
-    bool _isTopicSet;
+    int _clients_limit;
     bool _isInviteOnly;
+    bool _isTopic;
 
 
 public:
@@ -41,6 +43,8 @@ public:
     void setTopicSetter(Client &client);
     void setTopicDate();
     void setModes(std::string modes);
+    void setClientsLimit(int limit);
+    void setIsTopic(bool status);
 
     // ************GETTERS************
     std::string getTopic();
@@ -53,8 +57,11 @@ public:
     bool isInviteOnly();
     std::map<int, Client *> &getClients();
     std::map<int, Client *> &getChanOps();
+    std::map<int, Client *> &getInvitedClients();
     std::string getTopicSetter();
     std::string getTopicDate();
+    int getClientsLimit();
+    bool isTopic();
 
     // ************METHODS************
     void addClient(Client &client);
@@ -66,4 +73,7 @@ public:
     void setReplay(int replay, Server &server, Client &client);
     bool clientExist(Client &client);
     void removeOp(Client &client);
+    Client *getClientByNickname(std::string nickname);
+    bool isInvited(Client &client);
+    bool clientIsInvited(Client &client);
 };

@@ -5,8 +5,9 @@
 Channel::Channel()
 {
     this->_isInviteOnly = false;
-    this->_isTopicSet = true;
     this->_topic = "";
+    this->_clients_limit = 0;
+    this->_isTopic = true;
 }
 
 Channel::Channel(Client *op, int op_fd)
@@ -14,8 +15,9 @@ Channel::Channel(Client *op, int op_fd)
     this->_chan_ops.insert(std::pair<int, Client *>(op_fd, op));
     this->_clients.insert(std::pair<int, Client *>(op_fd, op));
     this->_isInviteOnly = false;
-    this->_isTopicSet = true;
     this->_topic = "";
+    this->_isTopic = true;
+    this->_clients_limit = 0;
 }
 
 Channel::~Channel()
@@ -68,6 +70,16 @@ void Channel::setIsInviteOnly(bool status)
     this->_isInviteOnly = status;
 }
 
+void Channel::setClientsLimit(int limit)
+{
+    this->_clients_limit = limit;
+}
+
+void Channel::setIsTopic(bool status)
+{
+    this->_isTopic = status;
+}
+
 // ************GETTERS************
 
 
@@ -88,13 +100,19 @@ std::string Channel::getPassword()
 
 std::string Channel::getModes()
 {
-    std::string modes = "+";
+    std::string modes = "";
     if (this->_isInviteOnly)
         modes += "i";
-    if (this->_isTopicSet)
+    if (this->_isTopic)
         modes += "t";
     if (this->_password != "")
-        modes += "k " + this->_password;
+        modes += "k";
+    if (this->_clients_limit > 0)
+        modes += "l";
+    if (this->_password != "")
+        modes += " " + this->_password;
+    if (modes.length())
+        modes = "+" + modes;
     return (modes);
 }
 
@@ -111,6 +129,21 @@ std::map<int, Client *> &Channel::getClients()
 std::map<int, Client *> &Channel::getChanOps()
 {
     return (this->_chan_ops);
+}
+
+int Channel::getClientsLimit()
+{
+    return (this->_clients_limit);
+}
+
+bool Channel::isTopic()
+{
+    return (this->_isTopic);
+}
+
+std::map<int, Client *> &Channel::getInvitedClients()
+{
+    return (this->_invited_clients);
 }
 
 // ************METHODS************
@@ -208,16 +241,41 @@ void Channel::removeOp(Client &client)
     this->_chan_ops.erase(client.getClientSockfd());
 }
 
-void Channel::setModes(std::string modes)
-{
-    if (modes.find("t") != std::string::npos)
-        this->_isTopicSet = true;
-    if (modes.find("i") != std::string::npos)
-        this->_isInviteOnly = true;
-    if (modes.find("k") != std::string::npos)
-    {
-        this->_password = modes.substr(modes.find("k") + 1);
-    }
 
+
+Client *Channel::getClientByNickname(std::string nickname)
+{
+    std::map<int, Client *>::iterator it = this->_clients.begin();
+    for (; it != this->_clients.end(); it++)
+    {
+        if (it->second->getNickname() == nickname)
+            return (it->second);
+    }
+    return (NULL);
 }
- 
+
+bool Channel::isInvited(Client &client)
+{
+    if (this->_invited_clients.size() == 0)
+        return (false);
+    std::map<int, Client *>::iterator it = this->_invited_clients.begin();
+    for (; it != this->_clients.end(); it++)
+    {
+        if (it->second->getNickname() == client.getNickname())
+            return (true);
+    }
+    return (false);
+}
+
+bool Channel::clientIsInvited(Client &client)
+{
+    if (this->_invited_clients.size() == 0)
+        return (false);
+    std::map<int, Client *>::iterator it = this->_invited_clients.begin();
+    for (; it != this->_invited_clients.end(); it++)
+    {
+        if (it->second->getNickname() == client.getNickname())
+            return (true);
+    }
+    return (false);
+}
