@@ -30,14 +30,6 @@ int Server::networkInit()
         throw std::runtime_error("bind Error: can't bind socket");
     }
 
-    char hostname[256];
-    if (gethostname(hostname, sizeof(hostname)) == -1)
-    {
-        throw std::runtime_error("gethostname Error: can't get hostname");
-    }
-    else
-        this->setHostname(hostname);
-
     if (listen(this->_serv_sockfd, 10) == -1)
     {
         throw std::runtime_error("listen Error: can't listen on socket");

@@ -33,13 +33,11 @@ Client &Client::operator=(const Client &client)
 
 bool Client::operator==(const Client &client) const
 {
-    // compare the addresses of the two objects and return true if they are equal
     return this == &client;
 }
 
 bool Client::operator!=(const Client &client) const
 {
-    // compare the two objects and return true if they are not equal
     return !(*this == client);
 }
 
@@ -154,27 +152,9 @@ int Client::getClientSockfd()
 
 std::string Client::getClientHostname()
 {
-    char hostname[NI_MAXHOST];
-    struct sockaddr_storage addr;
-    socklen_t len = sizeof(addr);
 
-    getpeername(this->_client_sockfd, (struct sockaddr *)&addr, &len);
-    int result = getnameinfo((struct sockaddr *)&addr, sizeof(struct sockaddr_storage),
-                             hostname, NI_MAXHOST, NULL, 0, 0);
-    if (result != 0)
-    {
-        return gai_strerror(result);
-    }
-    std::string hostname_str = std::string(hostname);
-    if (hostname_str == "localhost" || hostname_str == "127.0.0.1")
-    {
-        if (gethostname(hostname, sizeof(hostname)) == -1)
-        {
-            throw std::runtime_error("gethostname Error: can't get hostname");
-        }
-        hostname_str = std::string(hostname);
-    }
-PRINT("hostname_str: " << hostname_str)
+    std::string hostname_str = "localhost";
+
     return hostname_str;
 }
 

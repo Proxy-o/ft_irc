@@ -10,6 +10,7 @@ Server::Server(std::string password, std::string port) : _password(password), _p
 {
 
     this->setCreationDate();
+    this->_hostname = "localhost";
 }
 
 Server::~Server()
@@ -101,7 +102,6 @@ int Server::runLoop()
                 std::string message = client.getSendBuffer();
                 if (message != "")
                 {
-                    // DO NOT PRINT PING PONG
                     if (message.find("PING") != 0 && message.find("PONG") != 0)
                         PRINT(BLUE << "=> SERVER  : " << message << RESET);
                     int send_status = send(it->fd, message.c_str(), message.length(), 0);
@@ -244,4 +244,3 @@ void Server::removeChannel(Channel &channel)
         }
     }
 }
-
