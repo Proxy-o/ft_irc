@@ -15,7 +15,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-#define PRINT(x) std::cout << x << std::endl;
+// #define PRINT(x) std::cout << x << std::endl;
+// redefine print to not print nothing
+#define PRINT(x) ;
 #define PRINT_ERR(x) std::cerr << x << std::endl;
 #define SUCCESS 0
 #define FAIL -1
@@ -43,7 +45,6 @@ private:
     int _serv_sockfd;
     std::map<int, Client> _clients;
     std::vector<Channel> _channels;
-    
 
 public:
     Server();
